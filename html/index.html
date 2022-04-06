@@ -1,0 +1,61 @@
+<!-- <!DOCTYPE html> -->
+<html>
+<head>
+    <title>Walrus</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet"> 
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css')}}">
+</head>
+<body>
+<div class="navbar">
+    <div class ="navbar-left">
+        <div class="logo"><b>Logo</b></div>
+        <button class="navtab">Tab 1</button>
+        <button class="navtab">Tab 2</button>
+        <button class="navtab">Tab 3</button>
+        <button class="navtab">Tab 4</button>
+    </div>
+    <div class="navbar-right">
+        <button class="navtab">Register</button>
+    </div>
+</div>
+<div class="container">
+    <div class="hero">
+        <!-- <img src="../images/hero.jpeg" alt="Image of man looking at chalkboard" class="hero"/> -->
+    </div>
+    <!-- <div class="heroOutline">HERO MESSAGE</div>
+    <div class="heroMessage">
+        HERO MESSAGE
+    </div> -->
+    <div class = "login-box">
+        <div class="login-header">Start Chatting</div>
+        <form action="/" method="POST" class="login-form">
+            <div class="login-input">
+                <label for="username" class="input-label">Username:</label><br>
+                <input type="text" class="input-text" name="username"><br>
+            </div>
+            <div class="login-input">
+                <label for="password" class="input-label">Password:</label><br>
+                <input type="text" class="input-password" name="password"><br>
+            </div>
+            <!-- <br /> -->
+            <div class="login-remember">
+                <input type="checkbox" name="Remember me">  <span class="login-checkbox"></span>
+                <label for="Remember me" class="login-label">Remember me</label>
+            </div>
+            <div class="login-footer">
+                <input type="submit" value="LOGIN" class="login-button">
+            </div>
+          </form>
+    </div>
+</div>
+
+
+
+
+<!-- <script src="functions.js"></script> -->
+</body>
+</html>
