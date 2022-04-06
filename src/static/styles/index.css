@@ -10,7 +10,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
-    background-color:azure;
+    background-color:#fff;
     color: #000;
 }
 
@@ -32,11 +32,13 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     /* width: 100vw; */
 /*     gap:20px; */
     height: 60px;
-    background-color: azure;
+    background-color: #fff;
 }
 
 .navbar-right {
     grid-column: 2;
+    padding-right: 10px;
+    
     display:flex;
     flex-direction: row;
     justify-content: right;
@@ -65,14 +67,37 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     width:120px;
     border-radius: 0px;
     border:none;
-    background-color: azure;
+    background-color: #fff;
 }
 
 .navtab:hover {
     border-bottom: solid;
     border-width: 5px;
-    /* background-color:lightgray; */
-    background-color:rgba(0,0,0,0.1);
+/*     background-color:rgba(0,0,0,0.1); */
+    background-color: azure;
+    cursor: pointer;
+    
+    border-bottom: 5px solid;
+    border-image-slice:1;
+    border-width:3px;
+    border-image-source: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 29%, rgba(17,228,227,1) 64%, rgba(98,255,144,1) 97%);
+    
+
+
+/*     border:black; */
+}
+
+.navtab-text {
+    color: #000;
+}
+
+.navtab:hover .navtab-text {
+    background-color: #000; /* Fallback color */
+    background: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 29%, rgba(17,228,227,1) 64%, rgba(98,255,144,1) 97%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    color: transparent;
 }
 
 .container {
@@ -235,7 +260,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
      border: 3px solid #000;
     min-height:100%;
     color:white;
-    font-size:36px;
+    font-size:32px;
     font-weight:bold;
 }
 
