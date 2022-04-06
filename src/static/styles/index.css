@@ -18,6 +18,32 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-weight: bold; 
 }
 
+input[type=text] {
+    background-color: #fafafa;
+    padding-left:5px;
+}
+
+input[type=text]:hover {
+    background-color: azure;
+}
+
+input[type=text]:focus {
+    background-color: azure;
+}
+
+input[type=password] {
+    background-color: #fafafa;
+    padding-left:5px;
+}
+
+input[type=password]:hover {
+    background-color: azure;
+}
+
+input[type=password]:focus {
+    background-color: azure;
+}
+
 .page {
     /* display:flex; */
     /* flex-direction: column; */
@@ -279,12 +305,16 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-weight:bold;
 }
 
-
+.login-button-background {
+    width:100%;
+    min-height: 100%;
+    background-color:azure;
+}
 
 .login-button:hover {
     cursor: pointer;
 
-    background-color: #fff;
+    background-color: azure;
     background: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 29%, rgba(17,228,227,1) 64%, rgba(98,255,144,1) 97%);
     background-clip: text;
     -webkit-background-clip: text;
