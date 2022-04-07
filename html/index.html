@@ -12,7 +12,9 @@
 <body>
 <div class="navbar">
     <div class ="navbar-left">
-        <div class="logo"><b>Logo</b></div>
+        <a href="{{ url_for('login') }}" class = "logo-wrapper">
+            <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/>
+        </a>
         <button class="navtab"><div class = navtab-text>Tab 1</div></button>
         <button class="navtab"><div class = navtab-text>Tab 2</div></button>
         <button class="navtab"><div class = navtab-text>Tab 3</div></button>
