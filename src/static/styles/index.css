@@ -12,6 +12,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color:#fff;
     color: #000;
+    overflow:hidden;
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
@@ -44,19 +45,12 @@ input[type=password]:focus {
     background-color: azure;
 }
 
-.page {
-    /* display:flex; */
-    /* flex-direction: column; */
-}
+
+/* Navbar */
 
 .navbar {
     display:grid;
     grid-template-columns: 3fr 1fr;
-/*     flex-direction: row; */
-/*     align-items: center; */
-    /* font-weight: 400; */
-    /* width: 100vw; */
-/*     gap:20px; */
     height: 60px;
     background-color: #fff;
 }
@@ -84,15 +78,14 @@ input[type=password]:focus {
     height: 100%;
     display:flex;
     align-items: center;
+    margin-left:20px;
+    margin-right:15px;
 }
 
 .logo {
     /* font-size:30px; */
-    height:90%;
+    height:85%;
     object-fit: cover;
-    padding-left:20px;
-    padding-right:15px;
-
 }
 
 .navtab {
@@ -116,10 +109,6 @@ input[type=password]:focus {
     border-image-slice:1;
     border-width:3px;
     border-image-source: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 29%, rgba(17,228,227,1) 64%, rgba(98,255,144,1) 97%);
-    
-
-
-/*     border:black; */
 }
 
 .navtab-text {
@@ -128,34 +117,43 @@ input[type=password]:focus {
 
 .navtab:hover .navtab-text {
     background-color: #000; /* Fallback color */
-    background: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 29%, rgba(17,228,227,1) 64%, rgba(98,255,144,1) 97%);
+    background: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(17,228,227,1) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;
     color: transparent;
 }
 
+.active-tab {
+    border-bottom: 5px solid;
+    border-image-slice:1;
+    border-width:3px;
+    border-image-source: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 29%, rgba(17,228,227,1) 64%, rgba(98,255,144,1) 97%);
+}
+
+
+/* Page Content */
+
 .container {
-    display:grid;
     font-family: 'Montserrat', sans-serif;
-    /* font-weight: 700; */
-    /* font-weight: bold; */
-    display: grid;
+    height:700px;
+/*     height: calc(100vh- 60px); */
+    width: 100vw;
     
+    display: grid;
     grid-template-columns: repeat(12, 1fr);
+/*     grid-template-columns: repeat(12, minmax(50px, 1fr)); */
     grid-template-rows: repeat(12, 1fr);
-    /* grid-template-rows:4; */
 }
 
 .hero {
     width:100%;
     height:100%;
     grid-column:1/13;
-    grid-row:1/12;
+    grid-row:1/13;
     background-image: url("../images/hero.jpg");
     background-size: cover;
     background-position: 25% 60%;
-    
 }
 
 .hero::before {
@@ -180,8 +178,6 @@ input[type=password]:focus {
     font-weight: bold;
     font-size: 90px;
     
- 
-
     background-color: #fff;
     /* background-image:linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(46,216,235,1) 52%, rgba(41,191,85,1) 100%); */
     /* background: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 44%, rgba(80,172,194,1) 71%, rgba(41,191,85,1) 96%); */
@@ -192,8 +188,6 @@ input[type=password]:focus {
     color: transparent;
     /* -webkit-text-stroke: 10px transparent; */
     /* color:white; */
-
-    /* color: white; */
 }
 
 .heroOutline{
@@ -213,18 +207,28 @@ input[type=password]:focus {
     color:white;
 }
 
-.login-box {
-    position:relative;
-    grid-column:8/12;
+
+/* Login Box */
+.login-container {
+    grid-column:3/12;
     grid-row: 3/10;
 
-    background-color: #fff;
-    filter: drop-shadow(0.3em 0.3em 0.35em rgba(0, 0, 0, 0.5));
-    
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.login-box {
     display:flex;
     flex-direction:column;
     justify-content: start;
     align-items:center;
+
+    width: 375px;
+    height: 100%;
+
+    background-color: #fff;
+    filter: drop-shadow(0.3em 0.3em 0.35em rgba(0, 0, 0, 0.5));    
 }
 
 .login-header {
@@ -264,7 +268,6 @@ input[type=password]:focus {
     background-color: #fafafa;
     font-size:20px;
     padding-left:5px;
-    width:100%;
     min-height: 70%;
 /*     min-height: 50px; */
     /* outline: none; */
@@ -307,8 +310,9 @@ input[type=password]:focus {
 .login-button {
     width:100%;
     background-color: #000;
-     border: 3px solid #000;
+    border: 3px solid #000;
     min-height:100%;
+
     color:white;
     font-size:32px;
     font-weight:bold;
@@ -322,7 +326,6 @@ input[type=password]:focus {
 
 .login-button:hover {
     cursor: pointer;
-
     background-color: azure;
     background: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 29%, rgba(17,228,227,1) 64%, rgba(98,255,144,1) 97%);
     background-clip: text;
@@ -338,24 +341,19 @@ input[type=password]:focus {
     /* color: #000; */
     /* border: 2px solid #000; */
     /* background: linear-gradient(90deg, rgba(172,105,243,1) 0%, rgba(112,149,211,1) 29%, rgba(17,228,227,1) 64%, rgba(98,255,144,1) 97%); */
-
-
 }
 
 .login-remember {
     padding-bottom: 25px;
 }
 
-@media (max-width: 900px) {
-    .login-box {
-        grid-column:6/12;
-        grid-row: 3/10;
-    }
-}
 
-@media (min-width: 1300px) {
-    .login-box {
-        grid-column:9/12;
-        grid-row: 3/10;
+/* Media Queries */
+
+@media (max-width: 800px) {
+    .login-container {
+        justify-content: center;
+        grid-column:2/12;
+        grid-row: 2/9;
     }
 }
