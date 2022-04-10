@@ -10,3 +10,6 @@
 # IDEs
 .vscode/
 .idea/
+
+# Python interpreter
+*.pyc

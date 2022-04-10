@@ -1,7 +1,8 @@
-<!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html>
 <head>
     <title>Walrus</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +13,9 @@
 <body>
 <div class="navbar">
     <div class ="navbar-left">
-        <div class="logo"><b>Logo</b></div>
+        <a href="{{ url_for('login') }}" class = "logo-wrapper">
+            <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/>
+        </a>
         <button class="navtab"><div class = navtab-text>Tab 1</div></button>
         <button class="navtab"><div class = navtab-text>Tab 2</div></button>
         <button class="navtab"><div class = navtab-text>Tab 3</div></button>
@@ -30,34 +33,34 @@
     <div class="heroMessage">
         HERO MESSAGE
     </div> -->
-    <div class = "login-box">
-        <div class="login-header">Start Chatting</div>
-        <form action="/" method="POST" class="login-form">
-            <div class="login-input">
-                <label for="username" class="input-label">Username:</label><br>
-                <input type="text" class="input-text" name="username"><br>
-            </div>
-            <div class="login-input">
-                <label for="password" class="input-label">Password:</label><br>
-                <input type="password" class="input-password" name="password"><br>
-            </div>
-            <!-- <br /> -->
-            <div class="login-remember">
-                <input type="checkbox" name="Remember me">
-                <label for="Remember me" class="login-label">Remember me</label>
-            </div>
-            <div class="login-footer">
-                <div class="login-button-background">
-                    <input type="submit" value="LOGIN" class="login-button">
+    <div class = "login-container">
+        <div class = "login-box">
+            <div class="login-header">Start Chatting</div>
+            <form action="/" method="POST" class="login-form">
+                <div class="login-input">
+                    <label for="username" class="input-label">Username:</label><br>
+                    <input type="text" class="input-text" name="username"><br>
                 </div>
-            </div>
-          </form>
-    </div>
-</div>
-
-
-
-
-<!-- <script src="functions.js"></script> -->
+                <div class="login-input">
+                    <label for="password" class="input-label">Password:</label><br>
+                    <input type="password" class="input-password" name="password"><br>
+                </div>
+                <!-- <br /> -->
+                <div class="login-remember">
+                    <label>
+                        <input type="checkbox" name="Remember-me">
+                        Remember me
+                    </label>
+                </div>
+                <div class="login-footer">
+                    <div class="login-button-background">
+                        <input type="submit" value="LOGIN" class="login-button">
+                    </div>
+                </div>
+              </form>
+        </div>  <!-- End login-box -->
+    </div>  <!-- End login-container -->
+</div>  <!-- End container -->
 </body>
+<!-- <script src="functions.js"></script> -->
 </html>
