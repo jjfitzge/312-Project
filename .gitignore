@@ -13,3 +13,4 @@
 
 # Python interpreter
 *.pyc
+__pycache__/
