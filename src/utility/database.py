@@ -15,4 +15,9 @@ def create_entry(collection, email, username, password):
 
 
 def list_entry(collection):
-    return collection.find({}, {"_id": 1, "email": 1, "username": 1, "password": 1})
+    entry_list = collection.find(
+        {}, {"_id": 1, "email": 1, "username": 1, "password": 1})
+    retlist = []
+    for entry in entry_list:
+        retlist.append(entry)
+    return retlist
