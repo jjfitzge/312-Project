@@ -33,7 +33,7 @@ input[type=text]:focus {
 }
 
 input[type=password] {
-    background-color: #ec0101;
+    background-color: black;
     padding-left:5px;
 }
 
