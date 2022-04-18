@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 import os
 import html
-import database as DB
 
 #t_dir = os.path.abspath('./html')
 app = Flask(__name__, template_folder='./html')
@@ -17,9 +16,11 @@ def login():
 def return_news():
     return render_template('mainpage.html')
 
+
 def check_str_for_safety(string):
     retstr = html.escape(string)
     return retstr
+
 
 if __name__ == '__main__':
     HOST, PORT = "0.0.0.0", 8000
