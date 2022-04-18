@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import os
+import html
 
 #t_dir = os.path.abspath('./html')
 app = Flask(__name__, template_folder='./html')
@@ -16,13 +17,8 @@ def return_news():
     return render_template('mainpage.html')
 
 def check_str_for_safety(string):
-    if "</>" in string and "<>" in string:
-        safe_msg = string.replace("</>", "")
-        safe_msg1 = safe_msg.replace("<>", "")
-        return safe_msg1       
-    else: 
-        return string
-    return safe_msg1
+    retstr = html.escape(string)
+    return retstr
 
 if __name__ == '__main__':
     HOST, PORT = "0.0.0.0", 8000
