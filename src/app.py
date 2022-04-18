@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import os
 import html
+import database as DB
 
 #t_dir = os.path.abspath('./html')
 app = Flask(__name__, template_folder='./html')
