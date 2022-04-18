@@ -10,6 +10,11 @@ def login():
     if request.method == "GET":
         return render_template('index.html')
 
+@app.route('/chat', methods=["GET", "POST"])
+def chat():
+    if request.method == "GET":
+        return render_template('chatpage.html')
+
 
 @app.route('/mainpage')
 def return_news():

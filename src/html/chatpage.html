@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Walrus</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet"> 
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/sidebar.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/chatpage.css')}}">
+</head>
+<body>
+<div class="sidebar">
+    <div class ="sidebar-group">
+        <a href="{{ url_for('login') }}" class = "logo-wrapper">
+            <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/>
+        </a>
+        <button class="sidetab">
+            <div class = sidetab-content>
+                <div class = sidetab-icon> <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/></div>
+                <div class = sidetab-text>Chat</div>
+            </div>
+        </button>
+        <button class="sidetab">
+            <div class = sidetab-content>
+                <div class = sidetab-icon> <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/></div>
+                <div class = sidetab-text>Messages</div>
+            </div>
+        </button>
+        <button class="sidetab">
+            <div class = sidetab-content>
+                <div class = sidetab-icon> <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/></div>
+                <div class = sidetab-text>Video Call</div>
+            </div>
+        </button>
+    </div>
+    <div class="sidebar-group">
+        <button class="sidetab">
+            <div class = sidetab-content>
+                <div class = sidetab-icon> <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/></div>
+                <div class = sidetab-text>Register</div>
+            </div>
+        </button>
+    </div>
+</div>
+<div class="chatpage-container">
+
+
+
+
+</div>
+
+
+</body>
+</html>
