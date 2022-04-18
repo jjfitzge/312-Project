@@ -15,6 +15,14 @@ def login():
 def return_news():
     return render_template('mainpage.html')
 
+def check_str_for_safety(string):
+    if "</>" in string and "<>" in string:
+        safe_msg = string.replace("</>", "")
+        safe_msg1 = safe_msg.replace("<>", "")
+        return safe_msg1       
+    else: 
+        return string
+    return safe_msg1
 
 if __name__ == '__main__':
     HOST, PORT = "0.0.0.0", 8000
