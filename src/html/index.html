@@ -32,34 +32,35 @@
     <div class="heroMessage">
         HERO MESSAGE
     </div> -->
-    <div class = "login-box">
-        <div class="login-header">Start Chatting</div>
-        <form action="/" method="POST" class="login-form">
-            <div class="login-input">
-                <label for="username" class="input-label">Username:</label><br>
-                <input type="text" class="input-text" name="username"><br>
-            </div>
-            <div class="login-input">
-                <label for="password" class="input-label">Password:</label><br>
-                <input type="password" class="input-password" name="password"><br>
-            </div>
-            <!-- <br /> -->
-            <div class="login-remember">
-                <input type="checkbox" name="Remember me">
-                <label for="Remember me" class="login-label">Remember me</label>
-            </div>
-            <div class="login-footer">
-                <div class="login-button-background">
-                    <input type="submit" value="LOGIN" class="login-button">
+    <div class = "login-container">
+        <div class = "login-box">
+            <div class="login-header">Start Chatting</div>
+            <form action="/" method="POST" class="login-form">
+                <div class="login-input">
+                    <input type="text" class="input-text" name="username" placeholder=" "><br>
+                    <label for="username" class="input-label">Username</label><br>
                 </div>
-            </div>
-          </form>
-    </div>
-</div>
-
-
-
-
+                <div class="login-input">
+                    <input type="password" class="input-text" name="password" placeholder=" "><br>
+                    <label for="password" class="input-label">Password</label><br>
+                </div>
+                <!-- <br /> -->
+                <div class="login-remember">
+                    <label>
+                        <input type="checkbox" name="Remember-me">
+                        Remember me
+                    </label>
+                </div>
+                <div class="login-footer">
+                    <div class="login-button-background">
+                        <input type="submit" value="LOGIN" class="login-button">
+                    </div>
+                </div>
+              </form>
+        </div>  <!-- End login-box -->
+    </div>  <!-- End login-container -->
+</div>  <!-- End container -->
+</body>
 <!-- <script src="functions.js"></script> -->
 </body>
 </html>

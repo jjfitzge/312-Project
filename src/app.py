@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
 import os
-import json
 
-t_dir = os.path.abspath('../html')
-app = Flask(__name__, template_folder=t_dir)
+#t_dir = os.path.abspath('./html')
+app = Flask(__name__, template_folder='./html')
+
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -44,4 +44,5 @@ def return_news():
 
 
 if __name__ == '__main__':
-    app.run()
+    HOST, PORT = "0.0.0.0", 8000
+    app.run(HOST, PORT)
