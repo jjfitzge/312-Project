@@ -1,66 +1,95 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Walrus</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='images/favicon.ico') }}"
+    />
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css')}}">
-</head>
-<body>
-<div class="navbar">
-    <div class ="navbar-left">
-        <a href="{{ url_for('login') }}" class = "logo-wrapper">
-            <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/index.css')}}"
+    />
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-left">
+        <a href="{{ url_for('login') }}" class="logo-wrapper">
+          <img
+            src="{{ url_for('static', filename='images/walrusicon.png') }}"
+            alt="Walrus logo"
+            class="logo"
+          />
         </a>
-        <button class="navtab"><div class = navtab-text>Tab 1</div></button>
-        <button class="navtab"><div class = navtab-text>Tab 2</div></button>
-        <button class="navtab"><div class = navtab-text>Tab 3</div></button>
-        <button class="navtab"><div class = navtab-text>Tab 4</div></button>
+        <button class="navtab"><div class="navtab-text">Tab 1</div></button>
+        <button class="navtab"><div class="navtab-text">Tab 2</div></button>
+        <button class="navtab"><div class="navtab-text">Tab 3</div></button>
+        <button class="navtab"><div class="navtab-text">Tab 4</div></button>
+      </div>
+      <div class="navbar-right">
+        <button onclick="location.href='/register';">
+          <div class="navtab-text">Register</div>
+        </button>
+      </div>
     </div>
-    <div class="navbar-right">
-        <button class="navtab"><div class = navtab-text>Register</div></button>
-    </div>
-</div>
-<div class="container">
-    <div class="hero">
+    <div class="container">
+      <div class="hero">
         <!-- <img src="../images/hero.jpeg" alt="Image of man looking at chalkboard" class="hero"/> -->
-    </div>
-    <!-- <div class="heroOutline">HERO MESSAGE</div>
+      </div>
+      <!-- <div class="heroOutline">HERO MESSAGE</div>
     <div class="heroMessage">
         HERO MESSAGE
     </div> -->
-    <div class = "login-container">
-        <div class = "login-box">
-            <div class="login-header">Start Chatting</div>
-            <form action="/" method="POST" class="login-form">
-                <div class="login-input">
-                    <input type="text" class="input-text" name="username" placeholder=" "><br>
-                    <label for="username" class="input-label">Username</label><br>
-                </div>
-                <div class="login-input">
-                    <input type="password" class="input-text" name="password" placeholder=" "><br>
-                    <label for="password" class="input-label">Password</label><br>
-                </div>
-                <!-- <br /> -->
-                <div class="login-remember">
-                    <label>
-                        <input type="checkbox" name="Remember-me">
-                        Remember me
-                    </label>
-                </div>
-                <div class="login-footer">
-                    <div class="login-button-background">
-                        <input type="submit" value="LOGIN" class="login-button">
-                    </div>
-                </div>
-              </form>
-        </div>  <!-- End login-box -->
-    </div>  <!-- End login-container -->
-</div>  <!-- End container -->
-</body>
-<!-- <script src="functions.js"></script> -->
+      <div class="login-container">
+        <div class="login-box">
+          <div class="login-header">Start Chatting</div>
+          <form action="/" method="POST" class="login-form">
+            <div class="login-input">
+              <input
+                type="text"
+                class="input-text"
+                name="username"
+                placeholder=" "
+              /><br />
+              <label for="username" class="input-label">Username</label><br />
+            </div>
+            <div class="login-input">
+              <input
+                type="password"
+                class="input-text"
+                name="password"
+                placeholder=" "
+              /><br />
+              <label for="password" class="input-label">Password</label><br />
+            </div>
+            <!-- <br /> -->
+            <div class="login-remember">
+              <label>
+                <input type="checkbox" name="Remember-me" />
+                Remember me
+              </label>
+            </div>
+            <div class="login-footer">
+              <div class="login-button-background">
+                <input type="submit" value="LOGIN" class="login-button" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- End login-box -->
+      </div>
+      <!-- End login-container -->
+    </div>
+    <!-- End container -->
+  </body>
+  <!-- <script src="functions.js"></script> -->
 </html>
