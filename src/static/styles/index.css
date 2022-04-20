@@ -356,6 +356,29 @@ input[type=password]:focus {
 /*     padding-bottom: 25px; */
     margin-top:-10px;
 }
+/* Register Box */
+.register-container {
+    grid-column:3/12;
+    grid-row: 3/10;
+
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.register-box {
+    display:flex;
+    flex-direction:column;
+    justify-content: start;
+    align-items:center;
+
+    width: 375px;
+    height: 94%;
+
+    background-color: #fff;
+    filter: drop-shadow(0.3em 0.3em 0.35em rgba(0, 0, 0, 0.5));    
+}
+
 
 
 /* Media Queries */

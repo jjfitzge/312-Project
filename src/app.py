@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from flask_socketio import SocketIO, emit, send
+import random
 
 
 #t_dir = os.path.abspath('./html')
@@ -15,6 +16,7 @@ def login():
 
 @app.route('/mainpage')
 def return_news():
+    userID = request.cookies.get("ID")
     return render_template('mainpage.html')
 
 
@@ -35,7 +37,12 @@ def register():
         print(username, password, pass2)
         # if the passwords are equal then let them create the account and sign in
         if password == pass2:
-            pass
+            # Log in and save info to Database
+            response = make_response(render_template('mainpage.html'))
+            # Randomly generate ID until database implemented
+            userID = "User" + str(random.randint(0, 1000))
+            response.set_cookie("ID", userID)
+            return response
         else:
             return render_template('register.html')
         # if not then, take them back to the page to try and register again
