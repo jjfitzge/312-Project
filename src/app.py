@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect
 from flask_socketio import SocketIO, emit, send
 import random
 
@@ -6,6 +6,10 @@ import random
 #t_dir = os.path.abspath('./html')
 app = Flask(__name__, template_folder='./html')
 socketio = SocketIO(app)
+
+# Local storage to test displaying users
+online_users = []
+users = {}
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -17,7 +21,9 @@ def login():
 @app.route('/mainpage')
 def return_news():
     userID = request.cookies.get("ID")
-    return render_template('mainpage.html')
+    # TODO: Retrieve the users info (I.E username) using the userID
+    online_users.append(userID)
+    return render_template('mainpage.html', online_users=online_users)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -38,9 +44,12 @@ def register():
         # if the passwords are equal then let them create the account and sign in
         if password == pass2:
             # Log in and save info to Database
-            response = make_response(render_template('mainpage.html'))
+            response = make_response(redirect('/mainpage'))
             # Randomly generate ID until database implemented
             userID = "User" + str(random.randint(0, 1000))
+            # TODO: Replace w/ DB functionality
+            users[userID] = {}
+            users[userID]["username"] = username
             response.set_cookie("ID", userID)
             return response
         else:
