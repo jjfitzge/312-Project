@@ -15,6 +15,7 @@ html {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    transition: ease-in-out 150ms;
     background-color:#fff;
     justify-content: space-between;
 }
@@ -22,6 +23,7 @@ html {
 .sidebar-group {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .sidetab {
@@ -33,31 +35,50 @@ html {
     height: 4.5rem;
     border-radius: 0;
     border-width: 0;
+    border-left: 5px solid transparent;
     background-color: inherit;
-    
-    
-        
 }
+
+.sidetab-active {
+    color: rgba(172,105,243,1);
+    background-color: azure;
+    border-left: 5px solid rgba(172,105,243,1);
+}
+
+.icon-active {
+    fill: rgba(172,105,243,1);
+}
+
 .sidetab:hover {
     cursor: pointer;
     background-color: azure;
+    border-left: 5px solid #32b8f1;
+}
+
+.sidetab:hover * .sidetab-text {
+    color: #32b8f1;
 }
 
 .sidetab-content {
-    padding-left: 2rem;
+    padding-left: 1.3rem;
     display: flex;
     flex-direction: row;
     justify-content: left;
     align-items: center;
+    height: 100%;
     gap: 1.5rem;
 }
 
 .sidetab-icon {
     justify-content: center;
     object-fit: cover;
-    height:40px;
-    width: 40px;
+    height:35px;
+    width: 35px;
     display:flex;
+}
+
+.sidetab:hover * .icon { 
+    fill: #32b8f1;
 }
 
 .sidetab-text {
@@ -68,3 +89,80 @@ html {
     justify-content: left;
     width:10rem;
 }
+
+.sidebar-collapse-button {
+    position: absolute;
+    top: 12px;
+    left: 12rem;;
+    transition: ease-in-out 150ms;
+    height: 2rem;
+    width: 2rem;
+/*     border-radius: 50%; */
+}
+
+.sidebar-collapse-button-collapsed {   
+    transform: rotateY(-180deg);
+/*     transition: transform 150ms ease-in-out; */
+    left:5.5rem;
+    transition: ease-in-out 200ms;
+}
+
+.sidebar-collapse-button:hover {
+    cursor:pointer;
+    fill: #32b8f1;
+    color: #fff;
+}
+
+/* Styling for collapsed sidebar */
+
+.sidebar-collapsed {
+    transition: ease-in-out 150ms;
+    width: 5.55rem;
+}
+
+.sidetab-content-collapsed {
+    padding-right: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding-left: 0;
+    width: 100%;
+    
+}
+
+.sidetab-text-collapsed {
+    font-size: .8rem;
+    width: 100%;
+    text-align: center;
+}
+
+.logo-wrapper {
+    margin-left: 15px;
+    margin-bottom: .8rem;
+}
+
+@media only screen and (max-width: 1040px) {
+    .sidebar {
+        width: 5.55rem;
+    }
+    .sidetab-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        padding-left: 0;
+        width: 100%;
+    }
+    .sidetab-text {
+        font-size: .8rem;
+        width: 100%;
+        text-align: center;
+    }
+    .sidebar-collapse-button {
+        display:none;
+    }
+}
+
