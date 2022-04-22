@@ -4,6 +4,18 @@
     margin:0;
     padding:0;
 } */
+
+html {
+    box-sizing: border-box;
+    
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -12,6 +24,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color:#fff;
     color: #000;
+    background-color: #fafafa;
     /* overflow:hidden; */
 }
 
@@ -252,6 +265,7 @@ input[type=password]:focus {
     display: flex;
     flex-direction: column;
     gap:35px;
+    width: 80%;
     align-items: left;
 }
 
