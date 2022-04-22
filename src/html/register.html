@@ -1,0 +1,55 @@
+<!-- signifies the language of the document -->
+<!DOCTYPE html>
+<!-- html lang specifies the langage in which the content is going to be in -->
+<html lang="en">
+  <!-- head contains all the metadata of the webpage -->
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register Page</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Styles -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/index.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles/register.css')}}"
+    />
+  </head>
+  <body>
+    <h2>Welcome to Walrus</h2>
+    <div class="navbar">
+      <div class="navbar-left">
+        <div class="logo"><b>Logo</b></div>
+        <button class="navtab"><div class="navtab-text">Tab 1</div></button>
+        <button class="navtab"><div class="navtab-text">Tab 2</div></button>
+        <button class="navtab"><div class="navtab-text">Tab 3</div></button>
+        <button class="navtab"><div class="navtab-text">Tab 4</div></button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="hero">git</div>
+      <div class="register-box">
+        <form method="POST">
+          <label for="username"> Username: </label>
+          <input type="text" id="username" name="user" />
+          <br />
+          <label for="password"> Password:</label>
+          <input type="text" id="password" name="pass" />
+          <label for="password2"> Re-type Password</label>
+          <input type="text" id="password2" name="pass2" />
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
