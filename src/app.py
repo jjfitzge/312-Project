@@ -44,5 +44,5 @@ def return_news():
 
 
 if __name__ == '__main__':
-    HOST, PORT = "0.0.0.0", 8000
+    HOST, PORT = "0.0.0.0", 5000
     app.run(HOST, PORT)
