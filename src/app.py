@@ -22,16 +22,13 @@ def register():
         return render_template('register.html')
     if request.method == "POST":
         jsonData = request.form
+        profileImg = request.files['profile']
         # username -> "user"
-        
         # if username exists in the mongoDB break and ask them to make a new one.
         # if not continue with registration process, at line 43
-        # 
-        
         # password -> "pass"
         # password2 -> "pass2"
         print(jsonData)
-        user = jsonData
         username = jsonData.get('user')
         password = jsonData.get('pass')
         pass2 = jsonData.get('pass2')
