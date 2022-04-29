@@ -65,6 +65,8 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
                 if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
                     if userInfo["pass"] == userInfo["pass2"]:
                         self.request.sendall(hP.fileHttpString(code200, "src/html/chatpage.html", html))
+                    else:
+                        self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
                 else:
                     self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
 
