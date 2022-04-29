@@ -16,8 +16,8 @@ document.addEventListener("keypress", function (event) {
 
 // Renders a new chat message to the page
 function addMessage(chatMessage) {
-    let chat = document.getElementById('chat');
-    chat.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
+    let chatview = document.getElementById('chat-view');
+    chatview.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
 }
 
 // called when the page loads to get the chat_history
