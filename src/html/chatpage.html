@@ -8,16 +8,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet"> 
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css')}}">
+    <link rel="stylesheet" type="text/css" href="static/styles/index.css">
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/sidebar.css')}}"> -->
     <link rel="stylesheet" type="text/css" href="../static/styles/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/chatpage.css')}}">
+    <link rel="stylesheet" type="text/css" href="../static/styles/chatpage.css">
 </head>
 <body>
 <div class="sidebar">
     <div class ="sidebar-group">
-        <a href="{{ url_for('login') }}" class = "logo-wrapper">
-            <img src="{{ url_for('static', filename='images/walrusicon.png') }}" alt="Walrus logo" class="logo"/>
+        <a href="./index.html" class = "logo-wrapper">
+            <img src="../static/images/walrusicon.png" alt="Walrus logo" class="logo"/>
         </a>
         <div class="sidebar-collapse-button">
             <!-- <div class="sidetab-icon"> -->
@@ -70,10 +70,10 @@
 </div>
 <div class="chat-container">
     <div class="chat">
-        <div class="chat-heading">
-            <div class="heading">Chat</div>
-        </div>
         <div class="chat-box">
+            <div class="chat-heading">
+                <div class="heading">Chat</div>
+            </div>
             <div class="chat-view">
                 <div class="chat-message">
                     <b>Username:</b> message text here lorem ipsum lorem ipsum
@@ -114,11 +114,13 @@
                 <button class="send-button" onclick="sendMessage()">SEND</button>
             </div>
         </div>
-        <div class="user-list-heading">
-            <div class="heading">Online Users</div>
-        </div>
-        <div class="chat-user-list">
-    
+        <div class="user-list">
+            <div class="user-list-heading">
+                <div class="heading">Online</div>
+            </div>
+            <div class="user-list-view">
+        
+            </div>
         </div>
     </div>
 
@@ -128,6 +130,6 @@
 
 
 </body>
-<script src="{{ url_for('static', filename='scripts/sidebar.js') }}"></script>
+<script src="../static/scripts/sidebar.js"></script>
 <!-- <script src="../static/scripts/sidebar.js"></script> -->
 </html>
