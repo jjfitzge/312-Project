@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+
+
+
+<form action="/image-upload" id="image-form" method="post" enctype="multipart/form-data">
+    <input value="{{xsrftoken}}" name="xsrf_token" hidden>
+   <label for="image-form-comment">Comment: </label>
+
+   <textarea id="image-form-comment" name="comment" cols="40" rows="6"></textarea>
+   <br/>
+   <label for="form-file">Image: </label>
+   <input id="form-file" type="file" name="upload">
+   <input type="submit" value="Post">
+</form>
+
+
+<p>
+   {{replace this}}
+</p>
+</body>
+</html>
