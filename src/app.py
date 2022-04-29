@@ -40,15 +40,21 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
             elif getPath(request) == "/static/styles/index.css":
                 self.request.sendall(hP.fileHttpString(code200, "src/static/styles/index.css", css))
             elif getPath(request) == "/static/images/hero.jpg":
-                self.request.sendall(hP.imageHttpString("src/static/images/hero.jpg"))
+                self.request.sendall(hP.imageHttpString("src/static/images/hero.jpg",jpg))
             elif getPath(request) == "/register":
                 self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
             elif getPath(request) == "/static/images/favicon.ico":
-                self.request.sendall(hP.imageHttpString("src/static/images/favicon.ico"))
+                self.request.sendall(hP.imageHttpString("src/static/images/favicon.ico",ico))
             elif getPath(request) =="/static/images/walrusicon.png":
-                self.request.sendall(hP.imageHttpString("src/static/images/walrusicon.png"))
+                self.request.sendall(hP.imageHttpString("src/static/images/walrusicon.png",png))
             elif getPath(request) == "/static/images/walruslogo.png":
-                self.request.sendall(hP.imageHttpString("src/static/images/walruslogo.png"))
+                self.request.sendall(hP.imageHttpString("src/static/images/walruslogo.png", png))
+            elif getPath(request) == "/static/styles/chatpage.css":
+                self.request.sendall(hP.fileHttpString(code200,"src/static/styles/chatpage.css",css))
+            elif getPath(request) == "/static/scripts/sidebar.js":
+                self.request.sendall(hP.fileHttpString(code200,"src/static/scripts/sidebar.js", js))
+            elif getPath(request) == "/static/styles/sidebar.css":
+                self.request.sendall(hP.fileHttpString(code200, "src/static/styles/sidebar.css", css))
         elif isPost(request): 
             if getPath(request) == "/register":
                 # username = userInfo["user"]

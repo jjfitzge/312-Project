@@ -19,6 +19,12 @@ def fileHttpString(code: str, fileName: str, fileType: str) -> bytes:
     return createHttpString(code, fileContent[0], fileType, fileContent[1])
 
 
-def imageHttpString(imagePath: str) -> bytes:
+def imageHttpString(imagePath: str, mimeType: str) -> bytes:
     image = f.openImage(imagePath)
-    return createHttpString(a.code200, image[0], a.jpg, image[1])
+    if mimeType == a.jpg:
+        return createHttpString(a.code200, image[0], a.jpg, image[1])
+    elif mimeType == a.ico:
+        return createHttpString(a.code200, image[0], a.ico, image[1])
+    else:
+        return createHttpString(a.code200, image[0], a.png, image[1])
+    
