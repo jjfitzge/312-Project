@@ -1,3 +1,4 @@
+from ast import parse
 import socketserver
 from typing import List
 import httpString as hP
@@ -32,13 +33,20 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
         request: List[str] = requestParse(received_data.decode())
 
         if isGET(request):
-            print(request)
             if getPath(request) == "/":
                 self.request.sendall(hP.fileHttpString(code200,"src/html/index.html",html))
             elif getPath(request) == "/static/styles/index.css":
                 self.request.sendall(hP.fileHttpString(code200, "src/static/styles/index.css", css))
             elif getPath(request) == "/static/images/hero.jpg":
                 self.request.sendall(hP.imageHttpString("src/static/images/hero.jpg"))
+            elif getPath(request) == "/register":
+                self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
+        elif isPost(request): 
+            if getPath(request) == "/register":
+                userInfo: List[str] = parseUserInfo(request)
+                print(userInfo)
+
+            
 def requestParse(decoded_string: str) -> List[str]:
     string = decoded_string.split("\r\n")
     return string
@@ -68,7 +76,17 @@ def getPath(requestList: List[str]) -> str:
 def sizeString(string: str) -> int:
     fileSize = bytes(string, 'utf-8')
     return len(fileSize)
-       
+
+def parseUserInfo(request):
+    information: str = request[-1]
+    # 'user=hi&pass=thisIsMyPass&pass2=+++++hi'
+    idxUser = information.find("user=") 
+    idxPass = information.find("pass=") 
+    idxPass2 = information.find("pass2=")
+    user = information[idxUser + len("user="):idxPass].replace("&","")
+    password = information[idxPass+ len("pass="): idxPass2].replace("&","")
+    password2 = information[idxPass2 + len("pass2="):].replace("&","")
+    return {"user" : user, "pass": password , "pass2": password2}
 
 if __name__ == '__main__':
     host, port = "0.0.0.0", 5000
