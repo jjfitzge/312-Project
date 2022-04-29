@@ -21,6 +21,7 @@ css = "text/css"
 js = "text/javascript"
 png = "image/png"
 jpg = "image/jpeg"
+ico = "image/x-icon"
 mp4 = "video/mp4"
 MiMEjson = "application/json"
 multiPart = "multipart/form-data"
@@ -42,6 +43,12 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
                 self.request.sendall(hP.imageHttpString("src/static/images/hero.jpg"))
             elif getPath(request) == "/register":
                 self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
+            elif getPath(request) == "/static/images/favicon.ico":
+                self.request.sendall(hP.imageHttpString("src/static/images/favicon.ico"))
+            elif getPath(request) =="/static/images/walrusicon.png":
+                self.request.sendall(hP.imageHttpString("src/static/images/walrusicon.png"))
+            elif getPath(request) == "/static/images/walruslogo.png":
+                self.request.sendall(hP.imageHttpString("src/static/images/walruslogo.png"))
         elif isPost(request): 
             if getPath(request) == "/register":
                 # username = userInfo["user"]
