@@ -31,7 +31,8 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
 
         received_data = self.request.recv(1024)
         request: List[str] = requestParse(received_data.decode())
-
+        print("------Request Begins")
+        print(request)
         if isGET(request):
             if getPath(request) == "/":
                 self.request.sendall(hP.fileHttpString(code200,"src/html/index.html",html))
@@ -43,8 +44,16 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
                 self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
         elif isPost(request): 
             if getPath(request) == "/register":
+                # username = userInfo["user"]
+                # password = userInfo["pass"]
+                # password2 = userInfo["pass2"]
                 userInfo: List[str] = parseUserInfo(request)
                 print(userInfo)
+                if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
+                    if userInfo["pass"] == userInfo["pass2"]:
+                        self.request.sendall(hP.fileHttpString(code200, "src/html/chatpage.html", html))
+                else:
+                    self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
 
             
 def requestParse(decoded_string: str) -> List[str]:
