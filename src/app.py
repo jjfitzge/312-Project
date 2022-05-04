@@ -22,7 +22,7 @@ png = "image/png"
 jpg = "image/jpeg"
 mp4 = "video/mp4"
 MiMEjson = "application/json"
-multiPart = "multipart/form-data"-
+multiPart = "multipart/form-data"
 IMAGECOUNT = 0
 
 
@@ -55,51 +55,95 @@ def Bstring_Len_To_Num(b_string):
     return res
 
 
+
+def requestParse(decoded_string: str) -> List[str]:
+    string = decoded_string.split("\r\n")
+    return string
+
+def isGET(requestList: List[str]) -> bool:
+    request = requestList[0]
+    if request[0:3] == "GET":
+        return True
+    else:
+        return False
+
+# function to determine its a POST request
+def isPost(requestList: List[str]) -> bool:
+    request = requestList[0]
+    if request[0:4] == "POST":
+        return True
+    else:
+        return False
+
+def getPath(requestList: List[str]) -> str:
+    request: str = requestList[0]
+    path = request.split(" ")
+    if len(path) > 1:
+        return path[1]
+    return path[0]
+
+def sizeString(string: str) -> int:
+    fileSize = bytes(string, 'utf-8')
+    return len(fileSize)
+
+
+
 class MyTcpHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
         global IMAGECOUNT
+        #
+        
 
         received_data = self.request.recv(1024)
         #handles image upload
-        if received_data == b'POST /image-upload':
+        if received_data[0:18] == b'POST /image-upload':
             byte_copy_of_received_data = received_data
-        else:
-            request: List[str] = requestParse(received_data.decode())
-            raw_request_str_decoded = received_data.decode()
-
-#/Users/jiawe/PycharmProjects/imgs/312-Project/src/html/index.html
-
+        
+        request: List[str] = requestParse(received_data.decode())
+        print("------Request Begins")
         #print(request)
-        #if getPath(request) == "/":
-        #    self.request.sendall(hP.fileHttpString(code200, "src/html/index.html", html))
-        #elif getPath(request) == "/static/styles/index.css":
-        #    self.request.sendall(hP.fileHttpString(code200, "src/static/styles/index.css", css))
-        #elif getPath(request) == "/static/images/hero.jpg":
-        #    self.request.sendall(hP.imageHttpString("src/static/images/hero.jpg"))
+    
+        if isGET(request):
+            if getPath(request) == "/":
+                self.request.sendall(hP.fileHttpString(code200,"src/html/index.html",html))
+            elif getPath(request) == "/static/styles/index.css":
+                self.request.sendall(hP.fileHttpString(code200, "src/static/styles/index.css", css))
+            elif getPath(request) == "/htmltest":
+                self.request.sendall(hP.fileHttpString(code200,"src/html/htmltest.html", html))
+            elif getPath(request) == "/static/images/hero.jpg":
+                self.request.sendall(hP.imageHttpString("src/static/images/hero.jpg",jpg))
+            elif getPath(request) == "/register":
+                self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
+            elif getPath(request) == "/static/images/favicon.ico":
+                self.request.sendall(hP.imageHttpString("src/static/images/favicon.ico",ico))
+            elif getPath(request) =="/static/images/walrusicon.png":
+                self.request.sendall(hP.imageHttpString("src/static/images/walrusicon.png",png))
+            elif getPath(request) == "/static/images/walruslogo.png":
+                self.request.sendall(hP.imageHttpString("src/static/images/walruslogo.png", png))
+            elif getPath(request) == "/static/styles/chatpage.css":
+                self.request.sendall(hP.fileHttpString(code200,"src/static/styles/chatpage.css",css))
+            elif getPath(request) == "/static/scripts/sidebar.js":
+                self.request.sendall(hP.fileHttpString(code200,"src/static/scripts/sidebar.js", js))
+            elif getPath(request) == "/static/styles/sidebar.css":
+                self.request.sendall(hP.fileHttpString(code200, "src/static/styles/sidebar.css", css))
+        elif isPost(request): 
+            if getPath(request) == "/register":
+                # username = userInfo["user"]
+                # password = userInfo["pass"]
+                # password2 = userInfo["pass2"]
+                userInfo: List[str] = parseUserInfo(request)
+                print(userInfo)
+                if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
+                    if userInfo["pass"] == userInfo["pass2"]:
+                        self.request.sendall(hP.fileHttpString(code200, "src/html/chatpage.html", html))
+                    else:
+                        self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
+                else:
+                    self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
 
 
 
-
-       # if isGET(request):
-       #     print(request)
-        #    if getPath(request) == "/":
-       #         self.request.sendall(hP.fileHttpString(code200,"./html/index.html",html))
-       #     elif getPath(request) == "./index.css":
-       #         self.request.sendall(hP.fileHttpString(code200, "./static/styles/index.css", css))
-       #     elif getPath(request) == "./static/images/hero.jpg":
-       #        self.request.sendall(hP.imageHttpString("./static/images/hero.jpg"))
-
-
-        #print(request)
-        if getPath(request) == "/":
-                 self.request.sendall(hP.fileHttpString(code200,"./html/index.html",html))
-        elif getPath(request) == "/static/styles/index.css":
-                 self.request.sendall(hP.fileHttpString(code200, "./static/styles/index.css", css))
-        elif getPath(request) == "/static/styles/hero.jpg":
-                 self.request.sendall(hP.imageHttpString("./static/images/hero.jpg"))
-        if getPath(request) == "/htmltest":
-                 self.request.sendall(hP.fileHttpString (code200, "./html/htmltest.html", html))
 
         if received_data[0:18] == b'POST /image-upload':
             start_index_content_len = received_data.find(b'Content-Length:')
@@ -151,74 +195,36 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
             unfiltered_image = a[2]
             store = unfiltered_image
             synth = 0
-            if (len(store) > 2):  # yes, there is a picture being sent here
-                IMAGECOUNT += 1
-            else:
-                synth = 1
-            num = len(dash_web_kit_msg_final) + 4
-            second_num = len(store) - num
-            img = store[16: second_num]
-            #img is the image byte data for the image, if they did send any.
-            jpg = '.jpg'
-            string = './image/{}{}'.format(IMAGECOUNT, jpg)
-            string_without_dot = string[1:len(string)]  # /image/1.jpg
-            f = open(string, 'wb')
-            f.write(img)
-            f.close
-            full_string = '<img src="{}"/>'.format(string_without_dot)
-
+ 
+            if (len(store) > 100):  # yes, there is a picture being sent here
+               
+                IMAGECOUNT += 1           
+                num = len(dash_web_kit_msg_final) + 4
+                second_num = len(store) - num
+                img = store[16: second_num]
+                #img is the image byte data for the image, if they did send any.
+                jpg = '.jpg'
+                string = 'src/static/images/{}{}'.format(IMAGECOUNT, jpg)
+                string_without_dot = string[1:len(string)]  # /image/1.jpg
+                f = open(string, 'wb')
+                f.write(img)
+                f.close
+                full_string = '<img src="{}"/>'.format(string_without_dot)
+                print("this is the image count", IMAGECOUNT)
+                
+        #requires that you send a self.request.sendall to something else otherwise the image will end up posting twice.
+        self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
 
 #http://localhost:5000/static/styles/hero.jpg
-
-
-        #http: // localhost: 8000 / image / elephant.jpg
+ #http: // localhost: 8000 / image / elephant.jpg
 
 
         #for handling serving an image that is now saved in directory.
-        if raw_request_str_decoded[0:3] == 'GET':
-            request_msg = ''
-            for i in range(4, len(raw_request_str_decoded), 1):
-                endcond = raw_request_str_decoded[i + 1:i + 10]
-                request_msg += raw_request_str_decoded[i:i + 1]
-                if endcond == " HTTP/1.1":  # endcond is 9 chars long so you want to end it on
-                    break
-            if request_msg[0:7] == "/image/":
-                self.request.sendall(serve_image(request_msg))
 
 
 
 
 
-
-def requestParse(decoded_string: str) -> List[str]:
-    string = decoded_string.split("\r\n")
-    return string
-
-def isGET(requestList: List[str]) -> bool:
-    request = requestList[0]
-    if request[0:3] == "GET":
-        return True
-    else:
-        return False
-
-# function to determine its a POST request
-def isPost(requestList: List[str]) -> bool:
-    request = requestList[0]
-    if request[0:4] == "POST":
-        return True
-    else:
-        return False
-
-def getPath(requestList: List[str]) -> str:
-    request: str = requestList[0]
-    path = request.split(" ")
-    if len(path) > 1:
-        return path[1]
-    return path[0]
-
-def sizeString(string: str) -> int:
-    fileSize = bytes(string, 'utf-8')
-    return len(fileSize)
 
 
 
