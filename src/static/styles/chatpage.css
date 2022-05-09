@@ -20,6 +20,7 @@ body { /* Do a grid container if this doesn't work */
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(12, 1fr);
+    
 }
 
 .chat-box {
@@ -28,7 +29,63 @@ body { /* Do a grid container if this doesn't work */
     background-color: silver;
     border-right: 5px solid #fff;
     
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0px 2px 20px #cfd8dc;
 }
+
+.chat-view {
+    padding:.5rem;
+    
+    display:flex;
+    flex-direction: column-reverse;
+    overflow-y: scroll;
+}
+
+.chat-message {
+    padding-bottom:.5rem;
+}
+
+.chat-send-box {
+    min-height: 70px;
+    background-color: #fff;
+/*     border: 2px solid #000; */
+    border-top: 5px solid #000;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#send-input {
+    height: 70%;
+    width: 80%;
+    border: 3px solid #000;
+    
+    font-size: 1.3rem;
+}
+
+.send-button {
+    height: 70%;
+    width: 12%;
+    
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: #000;
+    border: 3px solid #000;
+}
+
+.send-button:hover {
+    background-color: azure;
+    border-color: #000;
+    color: #000;
+    cursor: pointer;
+    
+}
+
 
 .chat-user-list {
     grid-column: 10 / 13;
