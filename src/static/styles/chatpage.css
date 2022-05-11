@@ -36,6 +36,15 @@ body { /* Do a grid container if this doesn't work */
     box-shadow: 0px 2px 20px #cfd8dc;
 }
 
+.chat-content {
+    height: calc(100% - 2rem);
+    max-height: calc(100% - 2rem);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
 .chat-view {
     padding:.5rem;
     background: silver;
@@ -46,6 +55,7 @@ body { /* Do a grid container if this doesn't work */
 
 .chat-message {
     padding-bottom:.5rem;
+    
 }
 
 .chat-send-box {
