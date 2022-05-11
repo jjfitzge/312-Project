@@ -1,3 +1,4 @@
+from ast import parse
 import socketserver
 from typing import List
 import httpString as hP
@@ -20,6 +21,7 @@ css = "text/css"
 js = "text/javascript"
 png = "image/png"
 jpg = "image/jpeg"
+ico = "image/x-icon"
 mp4 = "video/mp4"
 MiMEjson = "application/json"
 multiPart = "multipart/form-data"
@@ -30,15 +32,45 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
 
         received_data = self.request.recv(1024)
         request: List[str] = requestParse(received_data.decode())
-
+        print("------Request Begins")
+        print(request)
         if isGET(request):
-            print(request)
             if getPath(request) == "/":
                 self.request.sendall(hP.fileHttpString(code200,"src/html/index.html",html))
             elif getPath(request) == "/static/styles/index.css":
                 self.request.sendall(hP.fileHttpString(code200, "src/static/styles/index.css", css))
             elif getPath(request) == "/static/images/hero.jpg":
-                self.request.sendall(hP.imageHttpString("src/static/images/hero.jpg"))
+                self.request.sendall(hP.imageHttpString("src/static/images/hero.jpg",jpg))
+            elif getPath(request) == "/register":
+                self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
+            elif getPath(request) == "/static/images/favicon.ico":
+                self.request.sendall(hP.imageHttpString("src/static/images/favicon.ico",ico))
+            elif getPath(request) =="/static/images/walrusicon.png":
+                self.request.sendall(hP.imageHttpString("src/static/images/walrusicon.png",png))
+            elif getPath(request) == "/static/images/walruslogo.png":
+                self.request.sendall(hP.imageHttpString("src/static/images/walruslogo.png", png))
+            elif getPath(request) == "/static/styles/chatpage.css":
+                self.request.sendall(hP.fileHttpString(code200,"src/static/styles/chatpage.css",css))
+            elif getPath(request) == "/static/scripts/sidebar.js":
+                self.request.sendall(hP.fileHttpString(code200,"src/static/scripts/sidebar.js", js))
+            elif getPath(request) == "/static/styles/sidebar.css":
+                self.request.sendall(hP.fileHttpString(code200, "src/static/styles/sidebar.css", css))
+        elif isPost(request): 
+            if getPath(request) == "/register":
+                # username = userInfo["user"]
+                # password = userInfo["pass"]
+                # password2 = userInfo["pass2"]
+                userInfo: List[str] = parseUserInfo(request)
+                print(userInfo)
+                if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
+                    if userInfo["pass"] == userInfo["pass2"]:
+                        self.request.sendall(hP.fileHttpString(code200, "src/html/chatpage.html", html))
+                    else:
+                        self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
+                else:
+                    self.request.sendall(hP.fileHttpString(code200, "src/html/register.html", html))
+
+            
 def requestParse(decoded_string: str) -> List[str]:
     string = decoded_string.split("\r\n")
     return string
@@ -68,7 +100,17 @@ def getPath(requestList: List[str]) -> str:
 def sizeString(string: str) -> int:
     fileSize = bytes(string, 'utf-8')
     return len(fileSize)
-       
+
+def parseUserInfo(request):
+    information: str = request[-1]
+    # 'user=hi&pass=thisIsMyPass&pass2=+++++hi'
+    idxUser = information.find("user=") 
+    idxPass = information.find("pass=") 
+    idxPass2 = information.find("pass2=")
+    user = information[idxUser + len("user="):idxPass].replace("&","")
+    password = information[idxPass+ len("pass="): idxPass2].replace("&","")
+    password2 = information[idxPass2 + len("pass2="):].replace("&","")
+    return {"user" : user, "pass": password , "pass2": password2}
 
 if __name__ == '__main__':
     host, port = "0.0.0.0", 5000
