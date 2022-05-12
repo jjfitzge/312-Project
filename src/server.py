@@ -40,13 +40,14 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             self.request.sendall(response_back)
             # Send connected users initial user frame
             test_username = "Hello World"
-            id = len(paths.online_users)
+
             send_frame = websocket.generate_frame(
-                websocket.gen_user_payload('addOnlineUser', 'user'+str(id) + "F", '/static/images/walruslogo.png', 'red'), paths.websocket_connections[self])
-            paths.online_users[self] = {
-                "username": "user"+str(id), "img_src": '/static/images/walruslogo.png', "color": "red"}
+                websocket.gen_user_payload('addOnlineUser', paths.websocket_connections[self] + "F", '/static/images/walruslogo.png', 'red'), paths.websocket_connections[self])
+
             for user in paths.websocket_connections.keys():
                 user.request.sendall(send_frame)
+            paths.online_users[self] = {
+                "username": "user"+paths.websocket_connections[self], "img_src": '/static/images/walruslogo.png', "color": "red"}
             while True:
                 websocket.ws_payload_length[self] = default_length
                 websocket.ws_payload_cur_length[self] = 0
