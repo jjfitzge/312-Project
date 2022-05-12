@@ -54,7 +54,7 @@ socket.onmessage = function (ws_message) {
         case 'chatMessage':
             addMessage(message);
             break;
-        case 'oddOnlineUser':
+        case 'addOnlineUser':
             addOnlineUser(message);
             break;
         case 'removeOnlineUser':
@@ -74,7 +74,7 @@ socket.onmessage = function (ws_message) {
             webRTCConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
             break;
         default:
-            console.log("received an invalid WS messageType");
+            console.log(`received an invalid WS messageType: ${messageType}`);
     }
 }
 
