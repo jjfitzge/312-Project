@@ -42,7 +42,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             payload = {'messageType': 'addOnlineUser', 'username': test_username,
                        "img_src": './src/static/images/walruslogo.png'}
             send_frame = websocket.generate_frame(
-                payload, paths.websocket_connections[self])
+                payload.encode(), paths.websocket_connections[self])
             for user in paths.websocket_connections.keys():
                 user.request.sendall(send_frame)
             while True:
@@ -77,7 +77,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     payload = {'messageType': 'RemoveOnlineUser',
                                'username': test_username}
                     send_frame = websocket.generate_frame(
-                        payload, paths.websocket_connections[self])
+                        payload.encode(), paths.websocket_connections[self])
                     for user in paths.websocket_connections.keys():
                         user.request.sendall(send_frame)
                     paths.user_connections.pop(username)
