@@ -14,6 +14,7 @@ users_ws = {}
 # Keep collection of currently logged in users
 
 online_users = {}
+online_users_id = {}
 
 
 def route_path(data, handler):
