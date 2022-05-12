@@ -172,6 +172,31 @@ body { /* Do a grid container if this doesn't work */
     font-size: .7rem;
 }
 
+.username-black {
+    color: #000;
+}
+
+.username-green {
+    color: #06d6a0;
+}
+
+.username-red {
+    color: #d62828;
+}
+
+.username-blue {
+    color: #0077b6;
+}
+
+.username-purple {
+    color: #7209b7;
+}
+
+.username-pink {
+    color: #f15bb5;
+}
+
+
 @media only screen and (max-width:850px) {
     /* #send-input {
         width: 70%;

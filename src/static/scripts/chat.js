@@ -25,8 +25,11 @@ function addMessage(chatMessage) {
     let chatview = document.getElementsByClassName('chat-view')[0];
     const newDiv = document.createElement('div');
     newDiv.classList.add("chat-message");
+    const nameColor = getUsernameColor(chatMessage['color']);
 
-    newDiv.innerHTML = ("<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>");
+    newDiv.innerHTML = `<b class=${nameColor}>${chatMessage['username']}</b> ${chatMessage["comment"]}<br/>`
+
+    // newDiv.innerHTML = ("<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>");
     chatview.prepend(newDiv);
 
     // chatview.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
@@ -109,10 +112,35 @@ function addOnlineUser(user) {
     if (!userAvatar) userAvatar = defaultImage;
 
     const username = user['username'];
+    const nameColor = getUsernameColor(user['color']);
 
-    newDiv.innerHTML = `<img src="${userAvatar}" alt="${username}'s avatar" class="avatar" /><b>${username}</b>`;
+    newDiv.innerHTML = `<img src="${userAvatar}" alt="${username}'s avatar" class="avatar" /><b class="${nameColor}">${username}</b>`;
 
     userList.append(newDiv);
+}
+
+function getUsernameColor(user) {
+    const color = user['color'];
+    switch(color) {
+        case "black":
+            return "username-black";
+            break;
+        case "red":
+            return "username-red";
+            break;
+        case "green":
+            return "username-green";
+            break;
+        case "blue":
+            return "username-blue";
+            break;
+        case "purple":
+            return "username-purple";
+        case "pink":
+            return "username-black";
+        default:
+            return "username-black";
+    }
 }
 
 /*
