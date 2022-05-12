@@ -35,6 +35,8 @@ def route_path(data, handler):
     if path == "/":
         # return get_html(headers)
         if type == "GET":
+            if headers.get("cookies", "") != "":
+                pass
             return get_html_file("/src/html/index.html", headers)
         if type == "POST":
             print("body---Body-------", body)
