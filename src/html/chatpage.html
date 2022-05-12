@@ -12,8 +12,8 @@
     <link rel="stylesheet" type="text/css" href="static/styles/sidebar.css">
     <link rel="stylesheet" type="text/css" href="static/styles/chatpage.css">
 </head>
-<!-- <body onload="initializePage();"> -->
-<body>
+<body onload="initializePage();">
+<!-- <body> -->
 <div class="sidebar">
     <div class ="sidebar-group">
         <a href="./index.html" class = "logo-wrapper">
@@ -89,7 +89,7 @@
             </div>
             <div class="user-list-view">
             </div>
-            <button onclick="removeOnlineUser({username: 'User6'})">DELETE</button>
+            <button onclick="removeAllUsers()">DELETE</button>
             <button onclick="addTestMessage()">Test Message</button>
         </div>
     </div>

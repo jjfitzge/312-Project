@@ -1,5 +1,5 @@
 console.log("Starting Script");
-getOnlineUsers();
+// getOnlineUsers();
 const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 function sendMessage() {
@@ -91,6 +91,16 @@ socket.onmessage = function (ws_message) {
 */
 function addOnlineUser(user) {
     const userList = document.getElementsByClassName('user-list-view')[0];
+    const onlineUsers = userList.querySelectorAll('.user-list-item');
+
+    for (u of onlineUsers) {
+        console.log("inner text", u.innerText);
+        if (u.innerText === user['username']) {
+            console.log(`Duplicate: ${u.username}`);
+            return;
+        }
+    }
+
     const newDiv = document.createElement('div');
     newDiv.classList.add("user-list-item");
 
@@ -116,13 +126,20 @@ function removeOnlineUser(user) {
     const userList = document.getElementsByClassName('user-list-item');
     let divToDelete;
     for (let u of userList) {
-        console.log(`Iterating: ${u.innerText}`)
+        console.log(`Want to delete ${user.username}     -       Iterating: ${u.innerText}`)
         if (u.innerText === user['username'])
             divToDelete = u;
     }
     if (divToDelete) {
         console.log(`Deleting: ${divToDelete.innerText}`);
         divToDelete.remove();
+    }
+}
+
+function removeAllUsers() {
+    const userList = document.getElementsByClassName('user-list-item');
+    for (let u of userList) {
+         u.remove();
     }
 }
 
