@@ -40,6 +40,8 @@ def route_path(data, handler):
             return register(body)
     elif path == "/chat":
         return get_html_file("/src/html/chatpage.html", headers)
+    elif path == "/static/scripts/chat.js":
+        return get_js(path)
     elif path == "/style.css":
         return get_css()
     elif path == "/functions.js":
