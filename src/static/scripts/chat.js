@@ -16,6 +16,8 @@ document.addEventListener("keypress", function (event) {
     }
 });
 
+// let chatBackground = 0;
+
 // Renders a new chat message to the page
 function addMessage(chatMessage) {
     let chatview = document.getElementsByClassName('chat-view')[0];
@@ -52,6 +54,12 @@ socket.onmessage = function (ws_message) {
         case 'chatMessage':
             addMessage(message);
             break;
+        case 'oddOnlineUser':
+            addOnlineUser(message);
+            break;
+        case 'removeOnlineUser':
+            removeOnlineUser(message);
+            break;
         case 'webRTC-offer':
             webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
             webRTCConnection.createAnswer().then(answer => {
@@ -85,9 +93,12 @@ function addOnlineUser(user) {
     newDiv.classList.add("user-list-item");
 
     const defaultImage = '/static/images/walrusicon.png';
+    let userAvatar = user['img_src'];
+    if (!userAvatar) userAvatar = defaultImage;
+
     const username = user['username'];
 
-    newDiv.innerHTML = `<img src="${defaultImage}" alt="${username}'s avatar" class="avatar" /><b>${username}</b>`;
+    newDiv.innerHTML = `<img src="${userAvatar}" alt="${username}'s avatar" class="avatar" /><b>${username}</b>`;
 
     userList.append(newDiv);
 }
@@ -113,7 +124,10 @@ function removeOnlineUser(user) {
 
 
 
-console.log("Adding messages")
+
+
+
+
 
 const testMessages = [];
 let i;
