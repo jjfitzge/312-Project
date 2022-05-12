@@ -35,7 +35,16 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         # Start routing requests after response if fully parsed
         response_back: bytes = paths.route_path(full_response, self)
         if request_dict["path"] == "/websocket":
+            # Send handshake
             self.request.sendall(response_back)
+            # Send connected users initial user frame
+            test_username = "Hello World"
+            payload = {'messageType': 'addOnlineUser', 'username': test_username,
+                       "img_src": './src/static/images/walruslogo.png'}
+            send_frame = websocket.generate_frame(
+                payload, paths.websocket_connections[self])
+            for user in paths.websocket_connections.keys():
+                user.request.sendall(send_frame)
             while True:
                 websocket.ws_payload_length[self] = default_length
                 websocket.ws_payload_cur_length[self] = 0
@@ -64,6 +73,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                 username = paths.websocket_connections[self]
                 if frame_dict["opcode"] == 8:
                     # remove self from data structures
+                    test_username = "Hello World"
+                    payload = {'messageType': 'RemoveOnlineUser',
+                               'username': test_username}
+                    send_frame = websocket.generate_frame(
+                        payload, paths.websocket_connections[self])
+                    for user in paths.websocket_connections.keys():
+                        user.request.sendall(send_frame)
                     paths.user_connections.pop(username)
                     paths.websocket_connections.pop(self)
                     break
