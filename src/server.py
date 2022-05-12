@@ -73,6 +73,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                 username = paths.websocket_connections[self]
                 if frame_dict["opcode"] == 8:
                     # remove self from data structures
+                    test_username = "Hello World"
+                    payload = {'messageType': 'RemoveOnlineUser',
+                               'username': test_username}
+                    send_frame = websocket.generate_frame(
+                        payload, paths.websocket_connections[self])
+                    for user in paths.websocket_connections.keys():
+                        user.request.sendall(send_frame)
                     paths.user_connections.pop(username)
                     paths.websocket_connections.pop(self)
                     break
