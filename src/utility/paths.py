@@ -510,4 +510,4 @@ def register(information):
 
 def get_online_users():
     response.get_response(json_util.dumps(
-        online_users.keys()).encode(), '200 OK')
+        online_users.values()).encode(), '200 OK')
