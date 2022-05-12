@@ -79,6 +79,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                         user.request.sendall(send_frame)
                     paths.user_connections.pop(username)
                     paths.websocket_connections.pop(self)
+                    paths.online_users.pop(self)
                     break
                 sys.stdout.flush()
                 is_webRTC = websocket.check_msg(json.loads(frame_dict["data"]))
