@@ -6,6 +6,7 @@ from utility import paths
 from utility import request
 from utility import websocket
 import json
+from bson import json_util
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
@@ -39,12 +40,14 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             self.request.sendall(response_back)
             # Send connected users initial user frame
             test_username = "Hello World"
-            payload = {'messageType': 'addOnlineUser', 'username': test_username,
-                       "img_src": './src/static/images/walruslogo.png'}
+
             send_frame = websocket.generate_frame(
-                payload, paths.websocket_connections[self])
+                websocket.gen_user_payload('addOnlineUser', paths.websocket_connections[self], '/static/images/walruslogo.png', 'red'), paths.websocket_connections[self])
+
             for user in paths.websocket_connections.keys():
                 user.request.sendall(send_frame)
+            paths.online_users[self] = {
+                "username": paths.websocket_connections[self], "img_src": '/static/images/walruslogo.png', "color": "red"}
             while True:
                 websocket.ws_payload_length[self] = default_length
                 websocket.ws_payload_cur_length[self] = 0
@@ -69,19 +72,18 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     sys.stdout.flush()
                 sys.stdout.flush()
                 frame_dict = websocket.parse_frame(full_ws_data)
+                # print(type(frame_dict["data"]))
                 sys.stdout.flush()
                 username = paths.websocket_connections[self]
                 if frame_dict["opcode"] == 8:
                     # remove self from data structures
-                    test_username = "Hello World"
-                    payload = {'messageType': 'RemoveOnlineUser',
-                               'username': test_username}
                     send_frame = websocket.generate_frame(
-                        payload, paths.websocket_connections[self])
+                        websocket.gen_user_payload('removeOnlineUser', 'user'+str(len(paths.online_users))), paths.websocket_connections[self])
                     for user in paths.websocket_connections.keys():
                         user.request.sendall(send_frame)
                     paths.user_connections.pop(username)
                     paths.websocket_connections.pop(self)
+                    paths.online_users.pop(self)
                     break
                 sys.stdout.flush()
                 is_webRTC = websocket.check_msg(json.loads(frame_dict["data"]))
@@ -92,6 +94,14 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     for user in paths.websocket_connections.keys():
                         if user != self:
                             user.request.sendall(send_frame)
+                elif json.loads(frame_dict["data"])['messageType'] == 'directMsg':
+                    print("This is a direct message")
+                    # Get the username of who the message is for
+                    toUser = json.loads(frame_dict["data"])['toUser']
+                    send_frame = websocket.generate_frame(
+                        frame_dict["data"], paths.websocket_connections[self])
+                    paths.user_connections[toUser].request.sendall(send_frame)
+
                 else:
                     send_frame = websocket.generate_frame(
                         frame_dict["data"], paths.websocket_connections[self])

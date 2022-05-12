@@ -186,13 +186,19 @@ def prepend_bits(string, bits):
 def parse_frame_message(message, username):
     frame_dict = {}
     frame_dict["messageType"] = message["messageType"]
-    if message["messageType"] == 'chatMessage':
+    if message["messageType"] == 'chatMessage' or message["messageType"] == 'directMsg':
         # sanitize message
         message["comment"] = message["comment"].replace('&', '&amp;')
         message["comment"] = message["comment"].replace('<', '&lt;')
         message["comment"] = message["comment"].replace('>', '&gt;')
         # add username
         message["username"] = username
+        # Eventually need to get color of the database for this user
+        message["color"] = 'black'
+        return json_util.dumps(message).encode()
+    elif message["messageType"] == 'addOnlineUser':
+        return json_util.dumps(message).encode()
+    elif message["messageType"] == 'removeOnlineUser':
         return json_util.dumps(message).encode()
 
 
@@ -318,7 +324,7 @@ def parse_payload_length(frame, handler):
 
 def check_msg(message):
     print(message)
-    return message["messageType"] != 'chatMessage'
+    return message["messageType"][:6] == 'webRTC'
 
 # Function that generates the return frame for a webRTC connection
 
@@ -330,3 +336,12 @@ def generate_webrtc_frame(payload, opcode=129):
     frame.extend(generate_payload_length(new_payload))
     frame.extend(new_payload)
     return bytes(frame)
+# Function to generate the user information sent over WS
+
+
+def gen_user_payload(messageType: str, username: str, src=None, color=None):
+    # Get user info from database (img_src, color)
+    if messageType == 'addOnlineUser':
+        return json.dumps({'messageType': messageType, 'username': username, "img_src": src, 'color': color})
+    else:
+        return json.dumps({'messageType': messageType, 'username': username})
