@@ -1,7 +1,7 @@
-// const socket = new WebSocket('ws://' + window.location.host + '/websocket');
+const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 function sendMessage() {
-    const chatBox = document.getElementById("chat-comment");
+    const chatBox = document.getElementById("send-input");
     const comment = chatBox.value;
     chatBox.value = "";
     chatBox.focus();
@@ -45,31 +45,31 @@ function get_chat_history() {
 }
 
 // Called whenever data is received from the server over the WebSocket connection
-// socket.onmessage = function (ws_message) {
-//     const message = JSON.parse(ws_message.data);
-//     const messageType = message.messageType
+socket.onmessage = function (ws_message) {
+    const message = JSON.parse(ws_message.data);
+    const messageType = message.messageType
 
-//     switch (messageType) {
-//         case 'chatMessage':
-//             addMessage(message);
-//             break;
-//         case 'webRTC-offer':
-//             webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
-//             webRTCConnection.createAnswer().then(answer => {
-//                 webRTCConnection.setLocalDescription(answer);
-//                 socket.send(JSON.stringify({'messageType': 'webRTC-answer', 'answer': answer}));
-//             });
-//             break;
-//         case 'webRTC-answer':
-//             webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
-//             break;
-//         case 'webRTC-candidate':
-//             webRTCConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
-//             break;
-//         default:
-//             console.log("received an invalid WS messageType");
-//     }
-// }
+    switch (messageType) {
+        case 'chatMessage':
+            addMessage(message);
+            break;
+        case 'webRTC-offer':
+            webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
+            webRTCConnection.createAnswer().then(answer => {
+                webRTCConnection.setLocalDescription(answer);
+                socket.send(JSON.stringify({'messageType': 'webRTC-answer', 'answer': answer}));
+            });
+            break;
+        case 'webRTC-answer':
+            webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
+            break;
+        case 'webRTC-candidate':
+            webRTCConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
+            break;
+        default:
+            console.log("received an invalid WS messageType");
+    }
+}
 
 
 
@@ -131,7 +131,7 @@ for (i = 0; i < 5; i++) {
     // console.log(payload);
 }
 
-for (let tm of testMessages) addMessage(tm);
+// for (let tm of testMessages) addMessage(tm);`
 
 function addTestMessage() {
     let chatview = document.getElementsByClassName('chat-view')[0];
