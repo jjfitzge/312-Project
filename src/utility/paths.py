@@ -470,8 +470,6 @@ def websocket_upgrade(headers, handler):
     #users[username] = handler
     websocket_connections[handler] = username
     # Retrieve users info
-    online_users[handler] = {"username": "user"+str(len(online_users)),
-                             "img_src": '/static/images/walruslogo.png', "color": "red"}
     print("==USER CONNECTIONS==")
     print(user_connections)
     return gen_response
