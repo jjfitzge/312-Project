@@ -14,8 +14,16 @@
       rel="stylesheet"
     />
     <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="../static/styles/index.css">
-    <link rel="stylesheet" type="text/css" href="../static/styles/register.css">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="styles/index.css'"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="'styles/register.css'"
+    />
   </head>
   <body>
     <h2>Welcome to Walrus</h2>
@@ -29,24 +37,17 @@
       </div>
     </div>
     <div class="container">
-      <div class="hero">git</div>
+      <div class="hero"></div>
       <div class="register-box">
-        <div class="register-name">Register</div>
         <form method="POST">
-          <div class="rUser-input">
-            <label for="username"> Username: </label>
-            <input type="text" id="username" name="user" />
-          </div>
-
-          <div class="rPassword-input">
-            <label for="password"> Password:</label>
-            <input type="text" id="password" name="pass" />
-          </div>
-          <div class="rPassword-input2">
-            <label for="password2"> Re-type Password</label>
-            <input type="text" id="password2" name="pass2" />
-            <input type="submit" value="Submit" />
-          </div>
+          <label for="username"> Username: </label>
+          <input type="text" id="username" name="user" />
+          <br />
+          <label for="password"> Password:</label>
+          <input type="text" id="password" name="pass" />
+          <label for="password2"> Re-type Password</label>
+          <input type="text" id="password2" name="pass2" />
+          <input type="submit" value="Submit" />
         </form>
       </div>
     </div>

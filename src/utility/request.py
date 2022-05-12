@@ -11,7 +11,7 @@ def print_request(dict):
     print("------------------REQUEST--------------------------")
     for item in dict:
         print("Key : {} , Value : {}".format(item, dict[item]))
-    print("###################HEADERS##########################")
+    # print("###################HEADERS##########################")
     for item in dict["header"]:
         print("Key : {} , Value : {}".format(item, dict["header"][item]))
     print("---------------------------------------------------")
@@ -124,7 +124,7 @@ def parse(data):
             header_list = parse_header(line)
             header_dict[header_list[0]] = header_list[1]
     requests.append(request_dict)
-    print_request(request_dict)
+    # print_request(request_dict)
     return request_dict
 
 
@@ -209,7 +209,7 @@ def parse_content_length(data, handler):
 
 
 def new_parse(data):
-    print("----------------------parse------------------------")
+    # print("----------------------parse------------------------")
     headers: str = data[:data.find(b'\r\n\r\n')]
     headers = headers.decode().split("\r\n")
     req_dict = parse_request_line(headers[0])
@@ -228,6 +228,6 @@ def new_parse(data):
     # print(req_dict["request_type"])
     # print("body: ", body)
     req_dict["body"] = body
-    print_request(req_dict)
+    # print_request(req_dict)
     return req_dict
-    print("======================================================")
+    # print("======================================================")
