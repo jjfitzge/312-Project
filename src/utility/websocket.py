@@ -186,7 +186,7 @@ def prepend_bits(string, bits):
 def parse_frame_message(message, username):
     frame_dict = {}
     frame_dict["messageType"] = message["messageType"]
-    if message["messageType"] == 'chatMessage':
+    if message["messageType"] == 'chatMessage' or message["messageType"] == 'directMsg':
         # sanitize message
         message["comment"] = message["comment"].replace('&', '&amp;')
         message["comment"] = message["comment"].replace('<', '&lt;')
