@@ -12,8 +12,7 @@ function sendMessage() {
 
 document.addEventListener("keypress", function (event) {
     if (event.code === "Enter") {
-        // sendMessage();
-        addTestMessage();
+        sendMessage();
     }
 });
 
