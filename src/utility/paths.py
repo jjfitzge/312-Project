@@ -509,5 +509,8 @@ def register(information):
 
 
 def get_online_users():
-    response.get_response(json_util.dumps(
-        online_users.values()).encode(), '200 OK')
+    retval = list(online_users.values())
+    print(retval)
+    print(type(retval))
+    print(json_util.dumps(retval).encode())
+    return response.get_response(json_util.dumps(retval).encode(), '200 OK')
