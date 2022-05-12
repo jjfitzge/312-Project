@@ -194,6 +194,10 @@ def parse_frame_message(message, username):
         # add username
         message["username"] = username
         return json_util.dumps(message).encode()
+    elif message["messageType"] == 'addOnlineUser':
+        return json_util.dumps(message).encode()
+    elif message["messageType"] == 'removeOnlineUser':
+        return json_util.dumps(message).encode()
 
 
 # -----For Testing Purposes---

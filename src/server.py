@@ -6,6 +6,7 @@ from utility import paths
 from utility import request
 from utility import websocket
 import json
+from bson import json_util
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
@@ -42,7 +43,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             payload = {'messageType': 'addOnlineUser', 'username': test_username,
                        "img_src": './src/static/images/walruslogo.png'}
             send_frame = websocket.generate_frame(
-                payload, paths.websocket_connections[self])
+                json.dumps(payload), paths.websocket_connections[self])
             for user in paths.websocket_connections.keys():
                 user.request.sendall(send_frame)
             while True:
@@ -69,6 +70,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     sys.stdout.flush()
                 sys.stdout.flush()
                 frame_dict = websocket.parse_frame(full_ws_data)
+                # print(type(frame_dict["data"]))
                 sys.stdout.flush()
                 username = paths.websocket_connections[self]
                 if frame_dict["opcode"] == 8:
@@ -77,7 +79,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     payload = {'messageType': 'RemoveOnlineUser',
                                'username': test_username}
                     send_frame = websocket.generate_frame(
-                        payload, paths.websocket_connections[self])
+                        json.dumps(payload), paths.websocket_connections[self])
                     for user in paths.websocket_connections.keys():
                         user.request.sendall(send_frame)
                     paths.user_connections.pop(username)
