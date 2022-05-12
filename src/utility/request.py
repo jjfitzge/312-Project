@@ -228,6 +228,6 @@ def new_parse(data):
     # print(req_dict["request_type"])
     # print("body: ", body)
     req_dict["body"] = body
-    # print_request(req_dict)
+    print_request(req_dict)
     return req_dict
     # print("======================================================")

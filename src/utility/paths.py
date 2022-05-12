@@ -47,7 +47,7 @@ def route_path(data, handler):
             # if database.check_user(username, password):
                 auth_token = authentication.gen_authToken()
                 # database.create_authToken(username, auth_token)
-                cookie = cookies.set_cookie("Auth-Token:%s" % auth_token)
+                cookie = cookies.set_cookie("Auth-Token=%s" % auth_token)
                 contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + cookie
                 body = get_body("./src/html/chatpage.html")
                 return response.get_response(body,"200 OK", contentType)
