@@ -1,3 +1,5 @@
+console.log("Starting Script");
+getOnlineUsers();
 const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 function sendMessage() {
@@ -118,18 +120,21 @@ function removeOnlineUser(user) {
         if (u.innerText === user['username'])
             divToDelete = u;
     }
-    if (divToDelete)
+    if (divToDelete) {
+        console.log(`Deleting: ${divToDelete.innerText}`);
         divToDelete.remove();
+    }
 }
 
 // called when the page loads to get the online users
 function getOnlineUsers() {
     const request = new XMLHttpRequest();
-    request.onreadystatechange = () => {
+    request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             console.log(`response: ${this.response}`);
             const users = JSON.parse(this.response);
             for (let user of users) {
+                console.log(`Adding User ${user.username}`);
                 addOnlineUser(user);
             }
         }
@@ -140,6 +145,7 @@ function getOnlineUsers() {
 
 function initializePage() {
     // get_chat_history();`
+    console.log("Initializing...");
     getOnlineUsers();
 }
 
