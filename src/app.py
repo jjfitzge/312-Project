@@ -55,6 +55,8 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
                 self.request.sendall(hP.fileHttpString(code200,"src/static/scripts/sidebar.js", js))
             elif getPath(request) == "/static/styles/sidebar.css":
                 self.request.sendall(hP.fileHttpString(code200, "src/static/styles/sidebar.css", css))
+            elif getPath(request) == "/static/styles/register.css":
+                self.request.sendall(hP.fileHttpString(code200, "src/static/styles/register.css", css))
         elif isPost(request): 
             if getPath(request) == "/register":
                 # username = userInfo["user"]
