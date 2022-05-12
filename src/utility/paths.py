@@ -11,6 +11,10 @@ user_connections = {}
 websocket_connections = {}
 users_ws = {}
 
+# Keep collection of currently logged in users
+
+online_users = {}
+
 
 def route_path(data, handler):
     request_dict = request.new_parse(data)
@@ -60,6 +64,8 @@ def route_path(data, handler):
             return user_upload(request_dict["multi-part"])
         else:
             return get_img('/'+img_src, img_src[len(img_src)-3:])
+    elif path == "/online-users":
+        return get_online_users()
     elif path == "/users":
         if type == "GET":
             return retrieve_all()
@@ -463,6 +469,9 @@ def websocket_upgrade(headers, handler):
     user_connections[username] = handler
     #users[username] = handler
     websocket_connections[handler] = username
+    # Retrieve users info
+    online_users[handler] = {"username": "Hello World",
+                             "img_src": '/static/images/walruslogo.png', "color": "red"}
     print("==USER CONNECTIONS==")
     print(user_connections)
     return gen_response
@@ -497,3 +506,8 @@ def register(information):
     body = b''
     content_type = 'text/plain; charset=utf-8\r\nLocation: /register'
     return response.get_response(body, response_code, content_type)
+
+
+def get_online_users():
+    response.get_response(json_util.dumps(
+        online_users.keys()).encode(), '200 OK')

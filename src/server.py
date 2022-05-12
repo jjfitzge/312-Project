@@ -41,7 +41,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             # Send connected users initial user frame
             test_username = "Hello World"
             send_frame = websocket.generate_frame(
-                websocket.gen_user_payload('addOnlineUser', test_username, './src/static/images/walruslogo.png', 'red'), paths.websocket_connections[self])
+                websocket.gen_user_payload('addOnlineUser', test_username, '/static/images/walruslogo.png', 'red'), paths.websocket_connections[self])
             for user in paths.websocket_connections.keys():
                 user.request.sendall(send_frame)
             while True:
@@ -89,6 +89,14 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     for user in paths.websocket_connections.keys():
                         if user != self:
                             user.request.sendall(send_frame)
+                elif json.loads(frame_dict["data"])['messageType'] == 'directMsg':
+                    print("This is a direct message")
+                    # Get the username of who the message is for
+                    toUser = json.loads(frame_dict["data"])['toUser']
+                    send_frame = websocket.generate_frame(
+                        frame_dict["data"], paths.websocket_connections[self])
+                    paths.user_connections[toUser].request.sendall(send_frame)
+
                 else:
                     send_frame = websocket.generate_frame(
                         frame_dict["data"], paths.websocket_connections[self])
