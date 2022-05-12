@@ -193,6 +193,8 @@ def parse_frame_message(message, username):
         message["comment"] = message["comment"].replace('>', '&gt;')
         # add username
         message["username"] = username
+        # Eventually need to get color of the database for this user
+        message["color"] = 'black'
         return json_util.dumps(message).encode()
     elif message["messageType"] == 'addOnlineUser':
         return json_util.dumps(message).encode()
