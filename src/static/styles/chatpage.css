@@ -38,7 +38,7 @@ body { /* Do a grid container if this doesn't work */
 
 .chat-content {
     height: calc(100% - 2rem);
-    max-height: calc(100% - 2rem);
+    max-height: calc(100% - 2.5rem);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -46,6 +46,7 @@ body { /* Do a grid container if this doesn't work */
 }
 
 .chat-view {
+    max-height: calc(100% - 2rem);
     padding:.5rem;
     background: silver;
     display:flex;
@@ -106,8 +107,16 @@ body { /* Do a grid container if this doesn't work */
 }
 
 .user-list-view {
-
+    height: calc(100% - 2rem);
+    max-height: calc(100% - 2.5rem);
+    width: 100%;
+    padding: 0rem 1rem;
+    padding-top: .5rem;
     overflow-y: scroll;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .heading {
@@ -137,6 +146,20 @@ body { /* Do a grid container if this doesn't work */
     display: flex; 
     align-items: center;
     padding-left: .5rem;
+}
+
+.user-list-item { 
+    height: 2.5rem;
+    width:100%;
+    font-size: 1.2rem;
+
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+}
+
+.avatar {
+    height: 80%;
 }
 
 @media only screen and (max-width:1190) {

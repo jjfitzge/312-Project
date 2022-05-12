@@ -12,7 +12,8 @@ function sendMessage() {
 
 document.addEventListener("keypress", function (event) {
     if (event.code === "Enter") {
-        sendMessage();
+        // sendMessage();
+        addTestMessage();
     }
 });
 
@@ -70,6 +71,49 @@ function get_chat_history() {
 //     }
 // }
 
+
+
+/*
+	addOnlineUser
+  	    Parameters:	    user - a user's information in JSON format
+	    Return Value:	none
+	Description:
+        Creates a new div and adds a user to the userlist using the the data in the passed in user object
+*/
+function addOnlineUser(user) {
+    const userList = document.getElementsByClassName('user-list-view')[0];
+    const newDiv = document.createElement('div');
+    newDiv.classList.add("user-list-item");
+
+    const defaultImage = '/static/images/walrusicon.png';
+    const username = user['username'];
+
+    newDiv.innerHTML = `<img src="${defaultImage}" alt="${username}'s avatar" class="avatar" /><b>${username}</b>`;
+
+    userList.append(newDiv);
+}
+
+/*
+	removeOnlineUser
+  	    Parameters:	    user - a user's information in JSON format
+	    Return Value:   none
+	Description:
+        Removes the online user div associated with the passed in user's username
+*/
+function removeOnlineUser(user) {
+    const userList = document.getElementsByClassName('user-list-item');
+    let divToDelete;
+    for (let u of userList) {
+        console.log(`Iterating: ${u.innerText}`)
+        if (u.innerText === user['username'])
+            divToDelete = u;
+    }
+    if (divToDelete)
+        divToDelete.remove();
+}
+
+
+
 console.log("Adding messages")
 
 const testMessages = [];
@@ -105,5 +149,6 @@ function addTestMessage() {
 
     newDiv.innerHTML = ("<b>" + payload['username'] + "</b>: " + payload["comment"] + "<br/>");
     chatview.prepend(newDiv);
+    addOnlineUser({username: username})
     i++;
 }
