@@ -122,9 +122,26 @@ function removeOnlineUser(user) {
         divToDelete.remove();
 }
 
+// called when the page loads to get the online users
+function getOnlineUsers() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = () => {
+        if (this.readyState === 4 && this.status === 200) {
+            console.log(`response: ${this.response}`);
+            const users = JSON.parse(this.response);
+            for (let user of users) {
+                addOnlineUser(user);
+            }
+        }
+    };
+    request.open("GET", "/online-users");
+    request.send();
+}
 
-
-
+function initializePage() {
+    // get_chat_history();`
+    getOnlineUsers();
+}
 
 
 
