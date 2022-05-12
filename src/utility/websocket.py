@@ -322,7 +322,7 @@ def parse_payload_length(frame, handler):
 
 def check_msg(message):
     print(message)
-    return message["messageType"] != 'chatMessage'
+    return message["messageType"][:6] == 'webRTC'
 
 # Function that generates the return frame for a webRTC connection
 
@@ -334,3 +334,12 @@ def generate_webrtc_frame(payload, opcode=129):
     frame.extend(generate_payload_length(new_payload))
     frame.extend(new_payload)
     return bytes(frame)
+# Function to generate the user information sent over WS
+
+
+def gen_user_payload(messageType: str, username: str, src=None, color=None):
+    # Get user info from database (img_src, color)
+    if messageType == 'addOnlineUser':
+        return json.dumps({'messageType': messageType, 'username': username, "img_src": src, 'color': color})
+    else:
+        return json.dumps({'messageType': messageType, 'username': username})

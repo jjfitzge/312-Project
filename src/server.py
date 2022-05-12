@@ -40,10 +40,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             self.request.sendall(response_back)
             # Send connected users initial user frame
             test_username = "Hello World"
-            payload = {'messageType': 'addOnlineUser', 'username': test_username,
-                       "img_src": './src/static/images/walruslogo.png'}
             send_frame = websocket.generate_frame(
-                json.dumps(payload), paths.websocket_connections[self])
+                websocket.gen_user_payload('addOnlineUser', test_username, './src/static/images/walruslogo.png', 'red'), paths.websocket_connections[self])
             for user in paths.websocket_connections.keys():
                 user.request.sendall(send_frame)
             while True:
@@ -75,11 +73,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                 username = paths.websocket_connections[self]
                 if frame_dict["opcode"] == 8:
                     # remove self from data structures
-                    test_username = "Hello World"
-                    payload = {'messageType': 'RemoveOnlineUser',
-                               'username': test_username}
                     send_frame = websocket.generate_frame(
-                        json.dumps(payload), paths.websocket_connections[self])
+                        websocket.gen_user_payload('removeOnlineUser', test_username), paths.websocket_connections[self])
                     for user in paths.websocket_connections.keys():
                         user.request.sendall(send_frame)
                     paths.user_connections.pop(username)
