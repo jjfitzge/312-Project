@@ -1,0 +1,29 @@
+.register-box{
+    grid-column: 3/12;
+    grid-row: 3/10;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 20rem;
+    background-color: #fff;
+  }
+
+.register-name{
+    display:flex;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    background-color: black;
+    width: 100%;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 40px;
+    color: #fff;
+}
+
+.rUser-input {
+    position: relative;
+    display:flex;
+    flex-direction:column;
+    justify-content: left;
+    min-height:50px;
+}

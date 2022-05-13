@@ -1,9 +1,12 @@
+from email import header
 from importlib.resources import path
 import json
 from . import response, database, request, template, authentication, cookies, websocket
 from bson import json_util
 import random
 
+
+storage = []
 users = {}
 users_tokens = {}
 chat_history = {}
@@ -11,6 +14,14 @@ user_connections = {}
 websocket_connections = {}
 users_ws = {}
 
+# b'\r\n\r\nusername=hello&password=there'
+def getUserInfo(body: bytes):
+    body = body.decode().strip()
+    idxUser = body.find("username=") + len("username=")
+    idxPass = body.find("password=")
+    username = body[idxUser: idxPass - len("&")]
+    password = body[idxPass + len("password="):]
+    return [username, password]
 # Keep collection of currently logged in users
 
 online_users = {}
@@ -23,7 +34,29 @@ def route_path(data, handler):
         "img_path"), request_dict["request_type"], request_dict.get("body"), request_dict.get("user_path"), request_dict.get("header")
     if path == "/":
         # return get_html(headers)
-        return get_html_file("/src/html/index.html", headers)
+        if type == "GET":
+            if headers.get("cookies", "") != "":
+                pass
+            return get_html_file("/src/html/index.html", headers)
+        if type == "POST":
+            print("body---Body-------", body)
+            userInfo = getUserInfo(body)
+            print(userInfo)
+            username = userInfo[0]
+            password = userInfo[1]
+            print(storage)
+            if {"username": username, "password": password} in storage:
+            # if database.check_user(username, password):
+                auth_token = authentication.gen_authToken()
+                # database.create_authToken(username, auth_token)
+                cookie = cookies.set_cookie("Auth-Token=%s" % auth_token)
+                contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + cookie
+                body = get_body("./src/html/chatpage.html")
+                return response.get_response(body,"200 OK", contentType)
+                # return get_html_file("/src/html/chatpage.html", cookie)
+                # send the http request of the chatpage, and set auth-token cookie
+            else:
+                return get_html_file("/src/html/index.html", headers)
     elif path == "/static/styles/index.css":
         return get_css(path)
     elif path == "src/html/register.html":
@@ -60,7 +93,7 @@ def route_path(data, handler):
     elif path == "/static/images":
         # Security: Sanitize path
         img_src = img_src.replace('/', '')
-        print(img_src)
+        # print(img_src)
         if img_src == "-upload":
             return user_upload(request_dict["multi-part"])
         else:
@@ -100,14 +133,14 @@ def get_body(filename):
                    './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html']
     # Comment out Database
     # valid_files += database.list_img()
-    print(filename)
-    print(valid_files)
+    # print(filename)
+    # print(valid_files)
     if filename in valid_files:
-        print("the file is valid")
+        # print("the file is valid")
         with open(filename, 'rb') as data:
             return data.read()
     else:
-        print("the file is invalid")
+        # print("the file is invalid")
         return False
 
 
@@ -148,7 +181,7 @@ def get_html(headers):
 
     # Check Headers dictionary for cookies
     cookies = headers.get('Cookie', '')
-    print("Cookies: ", cookies)
+    # print("Cookies: ", cookies)
     visits = 1
     auth = False
     username = ''
@@ -497,10 +530,13 @@ def register(information):
     userInfo = {"user": user, "pass": password, "pass2": password2}
     if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
         if userInfo["pass"] == userInfo["pass2"]:
-            response_code = '301 Moved Permanently'
-            body = b''
-            content_type = 'text/plain; charset=utf-8\r\nLocation: /chat'
-            return response.get_response(body, response_code, content_type)
+           response_code = '301 Moved Permanently'
+        body = b''
+        content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+        storage.append({"username": user, "password": password})
+        print("storage in register", storage)
+        # database.create_user(userInfo['user'], userInfo["pass"])
+        return response.get_response(body, response_code, content_type)
     response_code = '301 Moved Permanently'
     body = b''
     content_type = 'text/plain; charset=utf-8\r\nLocation: /register'
