@@ -11,12 +11,6 @@ socket.onmessage = function (ws_message) {
         case 'receivedDM':
             addMessage(message);
             break;
-        case 'addOnlineUser':
-            addOnlineUser(message);
-            break;
-        case 'removeOnlineUser':
-            removeOnlineUser(message);
-            break;
         default:
             console.log(`received an invalid WS messageType: ${messageType}`);
     }
