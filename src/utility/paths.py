@@ -120,6 +120,8 @@ def route_path(data, handler):
             return user_upload(request_dict["multi-part"])
         else:
             return get_img('/'+img_src, img_src[len(img_src)-3:])
+    elif path == "/image-upload":
+        return user_upload(request_dict["multi-part"])
     elif path == "/online-users":
         return get_online_users()
     elif path == "/users":
@@ -332,8 +334,9 @@ def delete(id):
 
 def user_upload(formdata):
     comment = ""
-    img_path = 'picture' + \
-        str(database.get_id(database.img_count_collection)+1)+'.jpg'
+    """ img_path = 'picture' + \
+        str(database.get_id(database.img_count_collection)+1)+'.jpg' """
+    img_path = 'picture' + str(random.randint(0, 1000))
     valid_token = False
     for data in formdata.values():
         if len(data) != 0:
@@ -343,23 +346,18 @@ def user_upload(formdata):
             if data_heading["name"] == "comment":
                 comment = data["body"]
             elif data_heading["name"] == "upload":
-                with open('./image/'+img_path, 'wb') as f:
+                with open('./src/static/images/'+img_path+'.jpg', 'wb') as f:
                     f.write(data["body"])
-            elif data_heading["name"] == "xsrf_token":
-                # check the token with our stored to see if match
-                if data["body"] == response.xrsf_token:
-                    valid_token = True
 
-    if valid_token:
-        database.create_msg(comment, img_path)
-        response_code = '301 Moved Permanently'
-        body = b''
-        content_type = 'text/plain; charset=utf-8\r\nLocation: /'
-        return response.get_response(body, response_code, content_type)
-    else:
+    #database.create_msg(comment, img_path)
+    response_code = '301 Moved Permanently'
+    body = b''
+    content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+    return response.get_response(body, response_code, content_type)
+    """ else:
         response_code = '403 Forbidden'
         body = b'request was rejected'
-        return response.get_response(body, response_code)
+        return response.get_response(body, response_code) """
 
 
 def signup(formdata):
