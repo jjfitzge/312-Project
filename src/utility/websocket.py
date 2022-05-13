@@ -184,10 +184,8 @@ def prepend_bits(string, bits):
 # Function that parses a frame's message if it is not a WebRTC connection
 
 
-def parse_frame_message(message, username):
-    frame_dict = {}
-    frame_dict["messageType"] = message["messageType"]
-    if message["messageType"] == 'chatMessage' or message["messageType"] == 'directMsg':
+def parse_frame_message(message, username, toUser=None):
+    if message["messageType"] == 'chatMessage' or message["messageType"] == 'directMessage':
         # sanitize message
         message["comment"] = message["comment"].replace('&', '&amp;')
         message["comment"] = message["comment"].replace('<', '&lt;')
@@ -196,6 +194,21 @@ def parse_frame_message(message, username):
         message["username"] = username
         # Eventually need to get color of the database for this user
         message["color"] = 'black'
+        if message["messageType"] == 'directMessage':
+            # Add username and comment to DS for both users
+            # Get dict for username
+            curUser = paths.open_dms[username]['openDMs']
+            for dms in curUser:
+                if dms['otherUsersName'] == toUser:
+                    dms['messages'].append(
+                        {'username': username, 'comment': message["comment"]})
+            otherUser = paths.open_dms[toUser]['openDMs']
+            for dms in otherUser:
+                if dms['otherUsersName'] == username:
+                    dms['messages'].append(
+                        {'username': username, 'comment': message["comment"]})
+            # Add username and message to both User objects
+
         return json_util.dumps(message).encode()
     elif message["messageType"] == 'addOnlineUser':
         return json_util.dumps(message).encode()
@@ -358,5 +371,24 @@ def handle_dm(fromUser, toUser):
             {'otherUsersName': fromUser, 'messages': []}]}
         paths.open_dms[fromUser] = retdict
         paths.open_dms[toUser] = retdict_reverse
+    else:
+        openDms = paths.open_dms[fromUser]['openDMs']
+        if any(toUser in d for d in openDms) == False:
+            # Add Touser to openDm's for fromUser
+            openDms.append({'otherUsersName': toUser, 'messages': []})
+            # Add fromUser to openDM's for toUser
+            paths.open_dms[toUser]['openDMs'].append(
+                {'otherUsersName': fromUser, 'messages': []})
+
     # If the record already exists do nothing
     # messages are in form {'username': username, 'comment': comment}
+
+
+def generate_dm_frame(payload, username, toUser, opcode=129):
+    # sanitize payload
+    new_payload = parse_frame_message(json.loads(payload), username, toUser)
+    frame = bytearray()
+    frame.extend(bytes([opcode]))
+    frame.extend(generate_payload_length(new_payload))
+    frame.extend(new_payload)
+    return bytes(frame)
