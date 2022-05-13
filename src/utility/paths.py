@@ -366,7 +366,7 @@ def user_upload(formdata):
             if data_heading["name"] == "comment":
                 comment = data["body"]
             elif data_heading["name"] == "upload":
-                with open('./src/static/images/'+img_path+'.jpg', 'wb') as f:
+                with open('./src/static/profiles/'+img_path+'.jpg', 'wb') as f:
                     f.write(data["body"])
 
     #database.create_msg(comment, img_path)
