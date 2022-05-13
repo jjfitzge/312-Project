@@ -14,16 +14,7 @@
       rel="stylesheet"
     />
     <!-- Styles -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="styles/index.css'"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="'styles/register.css'"
-    />
+    <link rel="stylesheet" type="text/css" href="../static/styles/index.css">
   </head>
 
   <style>
@@ -33,7 +24,6 @@
  </style>
 
   <body>
-    <h2>Welcome to Walrus</h2>
     <div class="navbar">
       <div class="navbar-left">
         <div class="logo"><b>Logo</b></div>
@@ -47,40 +37,26 @@
     <p>
       upload a picture for your account 
     </p>
-    <form action="/image-upload" id="image-form" method="post" enctype="multipart/form-data">
-      <input value="{{xsrftoken}}" name="xsrf_token" hidden>
-
-     
-    <div id = "topbar">
-     <label for="image-form-comment">Comment: </label>
-     <textarea id="image-form-comment" name="comment" cols="40" rows="6"></textarea>
-
-
-     <br/>
-   </div>
-
-     <label for="form-file">Image: </label>
-     <input id="form-file" type="file" name="upload">
-     <input type="submit" value="Post">
-  </form>
-
 
 
     <div class="container">
       <div class="hero"></div>
-      <div class="register-box">
-        <form method="POST">
-          <label for="username"> Username: </label>
-          <input type="text" id="username" name="user" />
-          <br />
-          <label for="password"> Password:</label>
-          <input type="text" id="password" name="pass" />
-          <label for="password2"> Re-type Password</label>
-          <input type="text" id="password2" name="pass2" />
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
-
-    </div>
+      <div class="login-container">
+        <div class="login-box">
+          <div class="login-header">Register User</div>
+          <form method="POST">
+            <label for="username"> Username: </label>
+            <input type="text" id="username" name="user" />
+            <br />
+            <label for="password"> Password:</label>
+            <input type="text" id="password" name="pass" />
+            <label for="password2"> Re-type Password</label>
+            <input type="text" id="password2" name="pass2" />
+            <input type="submit" value="Submit" />
+          </form>
+          
+        </div>
+      </div>     <!--end of register box -->
+    </div>  <!-- end of container -->
   </body>
 </html>
