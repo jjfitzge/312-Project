@@ -33,6 +33,10 @@ def getUserInfo(body: bytes):
 online_users = {}
 online_users_id = {}
 
+# DS for DM's
+# Username -> user's open DM object
+open_dms = {}
+
 
 def route_path(data, handler):
     request_dict = request.new_parse(data)
@@ -131,6 +135,8 @@ def route_path(data, handler):
         return get_html_file("/src/html/dm.html", headers)
     elif path == "/redirectdm":
         return redirect_dm()
+    elif path == "/open-dms":
+        return get_dm_history(handler)
     elif path == "/static/scripts/dm.js":
         return get_js(path)
     elif path == "/static/styles/dm.css":
@@ -593,3 +599,9 @@ def redirect_dm():
     body = b''
     content_type = 'text/plain; charset=utf-8\r\nLocation: /dm'
     return response.get_response(body, response_code, content_type)
+
+
+def get_dm_history(handler):
+    # from DS get the specfied user's collection
+    username = websocket_connections[handler]
+    return response.get_response(json_util.dumps(open_dms[username]).encode(), '200 OK')

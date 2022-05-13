@@ -3,6 +3,7 @@ import base64
 from sys import byteorder
 import json
 from bson import json_util
+from utility import paths
 
 # Dictionary to store the payload for a WS connection
 ws_payload_length = {}
@@ -350,9 +351,12 @@ def gen_user_payload(messageType: str, username: str, src=None, color=None):
 def handle_dm(fromUser, toUser):
     # If database does not have record for fromUser or toUser
     # Initialize
-    retdict = {"currentUser": fromUser, 'openDMs': [
-        {'otherUsersName': toUser, 'messages': []}]}
-    retdict_reverse = {"currentUser": toUser, 'openDMs': [
-        {'otherUsersName': fromUser, 'messages': []}]}
+    if fromUser not in paths.open_dms:
+        retdict = {"currentUser": fromUser, 'openDMs': [
+            {'otherUsersName': toUser, 'messages': []}]}
+        retdict_reverse = {"currentUser": toUser, 'openDMs': [
+            {'otherUsersName': fromUser, 'messages': []}]}
+        paths.open_dms[fromUser] = retdict
+        paths.open_dms[toUser] = retdict_reverse
     # If the record already exists do nothing
     # messages are in form {'username': username, 'comment': comment}
