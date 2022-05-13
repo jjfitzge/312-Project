@@ -21,3 +21,20 @@ socket.onmessage = function (ws_message) {
             console.log(`received an invalid WS messageType: ${messageType}`);
     }
 }
+
+function getOpenDMs() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            console.log(`response: ${this.response}`);
+            const openDMs = JSON.parse(this.response);
+            messageData = openDMs;
+            console.log(`Message Data ${messageData}`);
+            // for (let user of users) {
+            //     console.log(`Adding User ${user.username}`);
+            //     addOnlineUser(user);
+            }
+        }
+    request.open("GET", "/open-dms");
+    request.send();
+}
