@@ -366,6 +366,8 @@ def gen_user_payload(messageType: str, username: str, src=None, color=None):
 def handle_dm(fromUser, toUser):
     # If database does not have record for fromUser or toUser
     # Initialize
+    if fromUser == toUser:
+        return
     paths.toUserDict[fromUser] = toUser
     if fromUser not in paths.open_dms:
         retdict = {"currentUser": fromUser, 'openDMs': [
@@ -376,8 +378,13 @@ def handle_dm(fromUser, toUser):
         paths.open_dms[toUser] = retdict_reverse
     else:
         openDms = paths.open_dms[fromUser]['openDMs']
-        if any(toUser in d for d in openDms) == False:
+        print("---Checking From Users Object for toUser----")
+        exists = list(filter(lambda x: x.get(
+            'otherUsersName') == toUser, openDms))
+        print(toUser in d for d in openDms)
+        if not exists:
             # Add Touser to openDm's for fromUser
+            print("This toUser is not currenlty in the object")
             openDms.append({'otherUsersName': toUser, 'messages': []})
             # Add fromUser to openDM's for toUser
             paths.open_dms[toUser]['openDMs'].append(
