@@ -49,16 +49,19 @@ def route_path(data, handler):
             print('---------------requestDict----------')
             print(request_dict)
             print('++++++++++++++++++++++++++++++++++++')
-            cookie = headers.get("Cookie", "")
-            if cookie != "":
-                print(cookie)
-                auth_token = cookie.split("=")[1]
-                print("Auth-Token", auth_token)
-                # if auth-token in database send the chatpage
-                userInfo = database.getUser(auth_token)
-                print("USERINFOOOOOOO", userInfo)
-                if userInfo != "":
-                    return get_html_file("/src/html/chatpage.html", headers)
+            cooks = headers.get("Cookie", "").split(";")
+            for cook in cooks:
+                print("----------------")
+                print(cook)
+                if cook.startswith("Auth-Token="):
+                    print("COOKIEEEEEEEE",cook)
+                    auth_token = cook.split("Auth-Token=")[1]
+                    print("Auth-Token", auth_token)
+                    # if auth-token in database send the chatpage
+                    userInfo = database.getUser(auth_token)
+                    print("USERINFOOOOOOO", userInfo)
+                    if userInfo != "":
+                        return get_html_file("/src/html/chatpage.html", headers)
             return get_html_file("/src/html/index.html", headers)
         if type == "POST":
             print("body---Body-------", body)
