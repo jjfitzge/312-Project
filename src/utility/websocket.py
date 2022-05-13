@@ -345,3 +345,14 @@ def gen_user_payload(messageType: str, username: str, src=None, color=None):
         return json.dumps({'messageType': messageType, 'username': username, "img_src": src, 'color': color})
     else:
         return json.dumps({'messageType': messageType, 'username': username})
+
+
+def handle_dm(fromUser, toUser):
+    # If database does not have record for fromUser or toUser
+    # Initialize
+    retdict = {"currentUser": fromUser, 'openDMs': [
+        {'otherUsersName': toUser, 'messages': []}]}
+    retdict_reverse = {"currentUser": toUser, 'openDMs': [
+        {'otherUsersName': fromUser, 'messages': []}]}
+    # If the record already exists do nothing
+    # messages are in form {'username': username, 'comment': comment}

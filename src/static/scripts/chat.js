@@ -6,7 +6,7 @@ function sendMessage() {
     chatBox.value = "";
     chatBox.focus();
     if (comment !== "") {
-        socket.send(JSON.stringify({'messageType': 'chatMessage', 'comment': comment}));
+        socket.send(JSON.stringify({ 'messageType': 'chatMessage', 'comment': comment }));
     }
 }
 
@@ -87,10 +87,10 @@ socket.onmessage = function (ws_message) {
 
 
 /*
-	addOnlineUser
-  	    Parameters:	    user - a user's information in JSON format
-	    Return Value:	none
-	Description:
+    addOnlineUser
+            Parameters:	    user - a user's information in JSON format
+        Return Value:	none
+    Description:
         Creates a new div and adds a user to the userlist using the the data in the passed in user object
 */
 function addOnlineUser(user) {
@@ -123,7 +123,7 @@ function addOnlineUser(user) {
 
 function getUsernameColor(user) {
     const color = user['color'];
-    switch(color) {
+    switch (color) {
         case "black":
             return "username-black";
             break;
@@ -146,10 +146,10 @@ function getUsernameColor(user) {
 }
 
 /*
-	removeOnlineUser
-  	    Parameters:	    user - a user's information in JSON format
-	    Return Value:   none
-	Description:
+    removeOnlineUser
+            Parameters:	    user - a user's information in JSON format
+        Return Value:   none
+    Description:
         Removes the online user div associated with the passed in user's username
 */
 function removeOnlineUser(user) {
@@ -169,14 +169,14 @@ function removeOnlineUser(user) {
 function removeAllUsers() {
     const userList = document.getElementsByClassName('user-list-item');
     for (let u of userList) {
-         u.remove();
+        u.remove();
     }
 }
 
 // called when the page loads to get the online users
 function getOnlineUsers() {
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
+    request.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             console.log(`response: ${this.response}`);
             const users = JSON.parse(this.response);
@@ -199,7 +199,17 @@ function initializePage() {
 function goToDM(username) {
     console.log(`went to dm ${username}`)
     if (username) {
-        socket.send(JSON.stringify({'messageType': 'initDM', 'toUser': username}));
+        socket.send(JSON.stringify({ 'messageType': 'initDM', 'toUser': username }));
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log("window location:", window.location);
+                window.location = "dm";
+            }
+        };
+
+        request.open("GET", "/redirectdm");
+        request.send();
     }
 }
 
@@ -243,6 +253,6 @@ function addTestMessage() {
 
     newDiv.innerHTML = ("<b>" + payload['username'] + "</b>: " + payload["comment"] + "<br/>");
     chatview.prepend(newDiv);
-    addOnlineUser({username: username})
+    addOnlineUser({ username: username })
     i++;
 }
