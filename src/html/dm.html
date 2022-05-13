@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="static/styles/sidebar.css">
     <link rel="stylesheet" type="text/css" href="static/styles/dm.css">
 </head>
-<body onload="getOpenDMs();">
+<body onload="initDMPage();">
 <!-- <body> -->
 <div class="sidebar">
     <div class ="sidebar-group">
@@ -77,8 +77,8 @@
             <div class="chat-view">
             </div>
             <div class="chat-send-box">
-                <input id="send-input" type="text" name="send-input">
-                <button class="send-button" onclick="sendMessage()">SEND</button>
+                <input id="send-dm" type="text" name="send-dm">
+                <button class="send-button" onclick="sendDM()">SEND</button>
             </div>
         </div>
     </div>
