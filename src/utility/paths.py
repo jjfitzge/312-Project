@@ -1,6 +1,8 @@
 from email import header
 from importlib.resources import path
 import json
+
+from flask import redirect
 from . import response, database, request, template, authentication, cookies, websocket
 from bson import json_util
 import random
@@ -16,6 +18,8 @@ websocket_connections = {}
 users_ws = {}
 
 # b'\r\n\r\nusername=hello&password=there'
+
+
 def getUserInfo(body: bytes):
     body = body.decode().strip()
     idxUser = body.find("username=") + len("username=")
@@ -25,8 +29,14 @@ def getUserInfo(body: bytes):
     return [username, password]
 # Keep collection of currently logged in users
 
+
 online_users = {}
 online_users_id = {}
+
+# DS for DM's
+# Username -> user's open DM object
+open_dms = {}
+toUserDict = {}
 
 
 def route_path(data, handler):
@@ -57,16 +67,21 @@ def route_path(data, handler):
             password = userInfo[1]
             print(storage)
             if {"username": username, "password": password} in storage:
-            # if database.check_user(username, password):
+                # if database.check_user(username, password):
                 auth_token = authentication.gen_authToken()
                 # database.create_authToken(username, auth_token)
+                # add username cookie
+                user_cookie = cookies.set_cookie("Username=%s" % username)
                 # the above add the token to db with key "authToken"
-                cookie = cookies.set_cookie("Auth-Token=%s" % auth_token)
-                hashedToken = authentication.get_saltedhash(auth_token)["saltedhash"]
-                storage_tokens.append({"authToken" : hashedToken})
-                contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + cookie
+                cookie = cookies.set_cookie(
+                    "Auth-Token=%s" % auth_token, options='; HttpOnly')
+                hashedToken = authentication.get_saltedhash(auth_token)[
+                    "saltedhash"]
+                storage_tokens.append({"authToken": hashedToken})
+                contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + \
+                    cookie + user_cookie
                 body = get_body("./src/html/chatpage.html")
-                return response.get_response(body,"200 OK", contentType)
+                return response.get_response(body, "200 OK", contentType)
                 # return get_html_file("/src/html/chatpage.html", cookie)
                 # send the http request of the chatpage, and set auth-token cookie
             else:
@@ -81,7 +96,7 @@ def route_path(data, handler):
         return get_js(path)
     elif path == "/static/styles/sidebar.css":
         return get_css(path)
-    elif path == "/static/scripts/sidebar.css":
+    elif path == "/static/scripts/sidebar.js":
         return get_js(path)
     elif path == "/src/html/chatpage.html":
         return get_html_file(path, headers)
@@ -112,8 +127,23 @@ def route_path(data, handler):
             return user_upload(request_dict["multi-part"])
         else:
             return get_img('/'+img_src, img_src[len(img_src)-3:])
+    elif path == "/image-upload":
+        return user_upload(request_dict["multi-part"])
     elif path == "/online-users":
         return get_online_users()
+    elif path == "/dm":
+        print("Trying to get dm page")
+        return get_html_file("/src/html/dm.html", headers)
+    elif path == "/redirectdm":
+        return redirect_dm()
+    elif path == "/open-dms":
+        return get_dm_history(headers)
+    elif path == "/dm-to":
+        return get_toUser(headers)
+    elif path == "/static/scripts/dm.js":
+        return get_js(path)
+    elif path == "/static/styles/dm.css":
+        return get_css(path)
     elif path == "/users":
         if type == "GET":
             return retrieve_all()
@@ -137,14 +167,14 @@ def route_path(data, handler):
     elif path == "/userchat":
         return chat(request_dict["multi-part"], headers)
     elif path == "/websocket":
-        return websocket_upgrade(request_dict["header"]["Sec-WebSocket-Key"], handler)
+        return websocket_upgrade(request_dict["header"]["Sec-WebSocket-Key"], handler, headers)
     else:
         return four_o_four()
 
 
 def get_body(filename):
     valid_files = ['./src/static/images/favicon.ico', './src/static/images/hero.jpg', './src/static/images/walrusicon.png', './src/static/images/walruslogo.png', './src/static/scripts/chat.js', './src/static/scripts/sidebar.js', './src/static/styles/chatpage.css', './src/static/styles/index.css',
-                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html']
+                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html', './src/static/scripts/dm.js', './src/static/styles/dm.css']
     # Comment out Database
     # valid_files += database.list_img()
     # print(filename)
@@ -324,8 +354,9 @@ def delete(id):
 
 def user_upload(formdata):
     comment = ""
-    img_path = 'picture' + \
-        str(database.get_id(database.img_count_collection)+1)+'.jpg'
+    """ img_path = 'picture' + \
+        str(database.get_id(database.img_count_collection)+1)+'.jpg' """
+    img_path = 'picture' + str(random.randint(0, 1000))
     valid_token = False
     for data in formdata.values():
         if len(data) != 0:
@@ -335,23 +366,18 @@ def user_upload(formdata):
             if data_heading["name"] == "comment":
                 comment = data["body"]
             elif data_heading["name"] == "upload":
-                with open('./image/'+img_path, 'wb') as f:
+                with open('./src/static/images/'+img_path+'.jpg', 'wb') as f:
                     f.write(data["body"])
-            elif data_heading["name"] == "xsrf_token":
-                # check the token with our stored to see if match
-                if data["body"] == response.xrsf_token:
-                    valid_token = True
 
-    if valid_token:
-        database.create_msg(comment, img_path)
-        response_code = '301 Moved Permanently'
-        body = b''
-        content_type = 'text/plain; charset=utf-8\r\nLocation: /'
-        return response.get_response(body, response_code, content_type)
-    else:
+    #database.create_msg(comment, img_path)
+    response_code = '301 Moved Permanently'
+    body = b''
+    content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+    return response.get_response(body, response_code, content_type)
+    """ else:
         response_code = '403 Forbidden'
         body = b'request was rejected'
-        return response.get_response(body, response_code)
+        return response.get_response(body, response_code) """
 
 
 def signup(formdata):
@@ -499,7 +525,7 @@ def chat(formdata, headers):
         return response.get_response(body, response_code)
 
 
-def websocket_upgrade(headers, handler):
+def websocket_upgrade(headers, handler, request_header):
     print("sending websocket upgrade request")
     # print(headers)
     accept = websocket.generate_accept(headers)
@@ -513,7 +539,13 @@ def websocket_upgrade(headers, handler):
     """ lobal count
     count += 1 """
     # print(count)
-    username = "User" + str(random.randint(0, 1000))
+    cookies = request_header.get('Cookie', '')
+    username = cookies[cookies.find("Username=")+len("Username="):]
+    if username.find(';') != -1:
+        username = username[:username.find(';')]
+    print("Got the Username:", username)
+    #username = "User" + str(random.randint(0, 1000))
+
     user_connections[username] = handler
     #users[username] = handler
     websocket_connections[handler] = username
@@ -544,7 +576,7 @@ def register(information):
     userInfo = {"user": user, "pass": password, "pass2": password2}
     if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
         if userInfo["pass"] == userInfo["pass2"]:
-           response_code = '301 Moved Permanently'
+            response_code = '301 Moved Permanently'
         body = b''
         content_type = 'text/plain; charset=utf-8\r\nLocation: /'
         storage.append({"username": user, "password": password})
@@ -563,3 +595,31 @@ def get_online_users():
     print(type(retval))
     print(json_util.dumps(retval).encode())
     return response.get_response(json_util.dumps(retval).encode(), '200 OK')
+
+
+def redirect_dm():
+    response_code = '301 Moved Permanently'
+    body = b''
+    content_type = 'text/plain; charset=utf-8\r\nLocation: /dm'
+    return response.get_response(body, response_code, content_type)
+
+
+def get_dm_history(request_header):
+    # from DS get the specfied user's collection
+    print(websocket_connections)
+    cookies = request_header.get('Cookie', '')
+    username = cookies[cookies.find("Username=")+len("Username="):]
+    if username.find(';') != -1:
+        username = username[:username.find(';')]
+    print("Got the Username:", username)
+    print("username", username)
+    print(open_dms)
+    return response.get_response(json_util.dumps(open_dms[username]).encode(), '200 OK')
+
+
+def get_toUser(request_header):
+    cookies = request_header.get('Cookie', '')
+    username = cookies[cookies.find("Username=")+len("Username="):]
+    if username.find(';') != -1:
+        username = username[:username.find(';')]
+    return response.get_response(json_util.dumps(toUserDict[username]).encode(), '200 OK')
