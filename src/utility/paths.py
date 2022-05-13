@@ -577,6 +577,13 @@ def websocket_upgrade(headers, handler, request_header):
         username = username[:username.find(';')]
     print("Got the Username:", username)
     #username = "User" + str(random.randint(0, 1000))
+    # Check if username is already in the dS and remove it
+    if user_connections.get(username):
+        print("found duplicates")
+        user_connections.pop(username)
+        key = {
+            x for x in websocket_connections if websocket_connections[x] == username}
+        websocket_connections.pop(key[0])
 
     user_connections[username] = handler
     #users[username] = handler
@@ -584,6 +591,10 @@ def websocket_upgrade(headers, handler, request_header):
     # Retrieve users info
     print("==USER CONNECTIONS==")
     print(user_connections)
+    print("-------------------------")
+    print("==Websocket Connections==")
+    print(websocket_connections)
+    print("------------------------------")
     return gen_response
     #global websocket_connections
     #websocket_connections.append({'Socket': handler, 'Username': username})

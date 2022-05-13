@@ -78,6 +78,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                 username = paths.websocket_connections[self]
                 if frame_dict["opcode"] == 8:
                     # remove self from data structures
+                    print("---Closing The connection--")
+                    print("Sending a notification message to the users",
+                          paths.websocket_connections)
+                    print("username collection", paths.websocket_connections)
+                    print("Online users", paths.online_users)
+                    print("Open Dm's", paths.open_dms)
+                    print("------------------------------")
                     send_frame = websocket.generate_frame(
                         websocket.gen_user_payload('removeOnlineUser', paths.websocket_connections[self]), paths.websocket_connections[self])
                     for user in paths.websocket_connections.keys():
@@ -102,6 +109,11 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     # Handle dm
                     websocket.handle_dm(
                         paths.websocket_connections[self], toUser)
+                    print("Init DM", paths.websocket_connections)
+                    print("To the User", toUser)
+                    print("username collection", paths.websocket_connections)
+                    print("Online users", paths.online_users)
+                    print("Open Dm's", paths.open_dms)
                     """ send_frame = websocket.generate_frame(
                         frame_dict["data"], paths.websocket_connections[self])
                     paths.user_connections[toUser].request.sendall(send_frame) """
@@ -118,12 +130,27 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     print("user is sending a direct message")
                     toUser = json.loads(frame_dict["data"])['toUser']
                     send_frame = websocket.generate_dm_frame(
-                        frame_dict["data"], paths.websocket_connections[self])
+                        frame_dict["data"], paths.websocket_connections[self], toUser)
                     # Send the message
+                    print("Sending a direct message to the users",
+                          paths.websocket_connections)
+                    print("To the User", toUser)
+                    print("username collection", paths.websocket_connections)
+                    print("Online users", paths.online_users)
+                    print("Open Dm's", paths.open_dms)
                     paths.user_connections[toUser].request.sendall(send_frame)
                     # Send the notications frame
+                    print("This is the frame being sent for notifications", websocket.gen_user_payload(
+                        'recievedNotif', paths.websocket_connections[self], color='red'))
                     send_frame = websocket.generate_frame(
                         websocket.gen_user_payload('recievedNotif', paths.websocket_connections[self], color='red'), paths.websocket_connections[self])
+                    print("Sending a notification message to the users",
+                          paths.websocket_connections)
+                    print("To the User", toUser)
+                    print("username collection", paths.websocket_connections)
+                    print("Online users", paths.online_users)
+                    print("Open Dm's", paths.open_dms)
+                    paths.user_connections[toUser].request.sendall(send_frame)
 
                 else:
                     send_frame = websocket.generate_frame(
@@ -138,6 +165,11 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     sys.stdout.flush()
                     #database.insert_chat(username, msg)
                     # Send message to every WS connection currently connected
+                    print("Sending a chat message to the users",
+                          paths.websocket_connections)
+                    print("username collection", paths.websocket_connections)
+                    print("Online users", paths.online_users)
+                    print("Open Dm's", paths.open_dms)
                     for user in paths.websocket_connections.keys():
                         sys.stdout.flush()
                         user.request.sendall(send_frame)
