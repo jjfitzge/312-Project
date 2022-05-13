@@ -78,6 +78,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                 username = paths.websocket_connections[self]
                 if frame_dict["opcode"] == 8:
                     # remove self from data structures
+                    print("---Closing The connection--")
+                    print("Sending a notification message to the users",
+                          paths.websocket_connections)
+                    print("username collection", paths.websocket_connections)
+                    print("Online users", paths.online_users)
+                    print("Open Dm's", paths.open_dms)
+                    print("------------------------------")
                     send_frame = websocket.generate_frame(
                         websocket.gen_user_payload('removeOnlineUser', paths.websocket_connections[self]), paths.websocket_connections[self])
                     for user in paths.websocket_connections.keys():
