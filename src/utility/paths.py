@@ -136,7 +136,7 @@ def route_path(data, handler):
     elif path == "/redirectdm":
         return redirect_dm()
     elif path == "/open-dms":
-        return get_dm_history()
+        return get_dm_history(handler)
     elif path == "/static/scripts/dm.js":
         return get_js(path)
     elif path == "/static/styles/dm.css":
