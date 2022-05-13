@@ -357,6 +357,8 @@ def gen_user_payload(messageType: str, username: str, src=None, color=None):
     # Get user info from database (img_src, color)
     if messageType == 'addOnlineUser':
         return json.dumps({'messageType': messageType, 'username': username, "img_src": src, 'color': color})
+    if messageType == 'recieveNotif':
+        return json.dumps({'messageType': messageType, 'username': username, 'color': color})
     else:
         return json.dumps({'messageType': messageType, 'username': username})
 
@@ -364,6 +366,7 @@ def gen_user_payload(messageType: str, username: str, src=None, color=None):
 def handle_dm(fromUser, toUser):
     # If database does not have record for fromUser or toUser
     # Initialize
+    paths.toUserDict[fromUser] = toUser
     if fromUser not in paths.open_dms:
         retdict = {"currentUser": fromUser, 'openDMs': [
             {'otherUsersName': toUser, 'messages': []}]}
