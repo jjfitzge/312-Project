@@ -552,6 +552,10 @@ def websocket_upgrade(headers, handler, request_header):
     # Retrieve users info
     print("==USER CONNECTIONS==")
     print(user_connections)
+    print("-------------------------")
+    print("==Websocket Connections==")
+    print(websocket_connections)
+    print("------------------------------")
     return gen_response
     #global websocket_connections
     #websocket_connections.append({'Socket': handler, 'Username': username})
