@@ -1,0 +1,28 @@
+body { /* Do a grid container if this doesn't work */
+    display: flex;
+    flex-direction: row;
+}
+
+
+.video-container {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:#32b8f1;
+}
+
+.myVideo {
+    width: 20rem;
+    height: 20rem;
+    background-color: gainsboro;
+}
+
+.otherVideo {
+    width: 20rem;
+    height: 20rem;
+    background-color: peachpuff;
+}
