@@ -36,6 +36,7 @@ online_users_id = {}
 # DS for DM's
 # Username -> user's open DM object
 open_dms = {}
+toUserDict = {}
 
 
 def route_path(data, handler):
@@ -137,6 +138,8 @@ def route_path(data, handler):
         return redirect_dm()
     elif path == "/open-dms":
         return get_dm_history(headers)
+    elif path == "/dm-to":
+        return get_toUser(headers)
     elif path == "/static/scripts/dm.js":
         return get_js(path)
     elif path == "/static/styles/dm.css":
@@ -612,3 +615,11 @@ def get_dm_history(request_header):
     print("username", username)
     print(open_dms)
     return response.get_response(json_util.dumps(open_dms[username]).encode(), '200 OK')
+
+
+def get_toUser(request_header):
+    cookies = request_header.get('Cookie', '')
+    username = cookies[cookies.find("Username=")+len("Username="):]
+    if username.find(';') != -1:
+        username = username[:username.find(';')]
+    return response.get_response(json_util.dumps(toUserDict[username]).encode(), '200 OK')

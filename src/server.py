@@ -114,6 +114,16 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     # paths.online_users.pop(self)
                     self.request.sendall(response.get_response(
                         body, response_code, content_type)) """
+                elif json.loads(frame_dict["data"])['messageType'] == 'directMessage':
+                    print("user is sending a direct message")
+                    toUser = json.loads(frame_dict["data"])['toUser']
+                    send_frame = websocket.generate_dm_frame(
+                        frame_dict["data"], paths.websocket_connections[self])
+                    # Send the message
+                    paths.user_connections[toUser].request.sendall(send_frame)
+                    # Send the notications frame
+                    send_frame = websocket.generate_frame(
+                        websocket.gen_user_payload('recievedNotif', paths.websocket_connections[self], color='red'), paths.websocket_connections[self])
 
                 else:
                     send_frame = websocket.generate_frame(
