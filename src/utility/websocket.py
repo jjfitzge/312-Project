@@ -214,7 +214,7 @@ def parse_frame_message(message, username, toUser=None):
         return json_util.dumps(message).encode()
     elif message["messageType"] == 'removeOnlineUser':
         return json_util.dumps(message).encode()
-    elif message["messageType"] == 'recievedNotif':
+    elif message["messageType"] == 'receivedNotif':
         return json_util.dumps(message).encode()
 
 
