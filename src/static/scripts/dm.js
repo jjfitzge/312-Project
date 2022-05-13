@@ -18,8 +18,8 @@ socket.onmessage = function (ws_message) {
 }
 
 function initDMPage() {
-    getOpenDMs();
     initRecipient();
+    getOpenDMs();
 }
 
 function getOpenDMs() {
@@ -38,29 +38,31 @@ function getOpenDMs() {
             // for (let user of users) {
             //     console.log(`Adding User ${user.username}`);
             //     addOnlineUser(user);
-            }
         }
+    }
     request.open("GET", "/open-dms");
     request.send();
 }
 
 function initRecipient() {
+    console.log("Initializing Recipient");
     const request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             console.log(`response: ${this.response}`);
-            const data = JSON.parse(this.response);
-            for (let d of data) {
-                // console.log(`Adding User ${d.username}`);
-                // addOpenDM(d);
-            }
+            // const data = JSON.parse(this.response);
+            // setOpenMessage(data['toUser']);
+            const data = this.response;
+            setOpenMessage(data);
 
-            const toUser = data.toUser;
-            recipient = toUser;
+            console.log("set user to ", data);
+
+            // const toUser = data.toUser;
+            // recipient = toUser;
         }
-        request.open("GET", "/dm-to");
-        request.send();
-    };
+    }
+    request.open("GET", "/dm-to");
+    request.send();
 }
 
 function sendDM() {
