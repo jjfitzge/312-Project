@@ -53,9 +53,12 @@ function initRecipient() {
             // const data = JSON.parse(this.response);
             // setOpenMessage(data['toUser']);
             const data = this.response;
-            setOpenMessage(data);
+            console.log(`Datatype: ${(typeof data)}`)
+            const toUser = data.slice(1, data.length-1); // Remove quotations from the data
+            setOpenMessage(toUser);
 
-            console.log("set user to ", data);
+
+            console.log("set user to ", toUser);
 
             // const toUser = data.toUser;
             // recipient = toUser;
@@ -77,6 +80,7 @@ function sendDM() {
 }
 
 function setOpenMessage(username) {
+    console.log(`Set recipient to ${username}`);
     recipient = username;
 }
 
