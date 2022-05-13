@@ -25,6 +25,13 @@
       href="'styles/register.css'"
     />
   </head>
+
+  <style>
+    div#topbar {
+    display: none;
+    }
+ </style>
+
   <body>
     <h2>Welcome to Walrus</h2>
     <div class="navbar">
@@ -36,6 +43,29 @@
         <button class="navtab"><div class="navtab-text">Tab 4</div></button>
       </div>
     </div>
+
+    <p>
+      upload a picture for your account 
+    </p>
+    <form action="/image-upload" id="image-form" method="post" enctype="multipart/form-data">
+      <input value="{{xsrftoken}}" name="xsrf_token" hidden>
+
+     
+    <div id = "topbar">
+     <label for="image-form-comment">Comment: </label>
+     <textarea id="image-form-comment" name="comment" cols="40" rows="6"></textarea>
+
+
+     <br/>
+   </div>
+
+     <label for="form-file">Image: </label>
+     <input id="form-file" type="file" name="upload">
+     <input type="submit" value="Post">
+  </form>
+
+
+
     <div class="container">
       <div class="hero"></div>
       <div class="register-box">
@@ -50,6 +80,7 @@
           <input type="submit" value="Submit" />
         </form>
       </div>
+
     </div>
   </body>
 </html>
