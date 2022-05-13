@@ -7,6 +7,7 @@ import random
 
 
 storage = []
+storage_tokens = []
 users = {}
 users_tokens = {}
 chat_history = {}
@@ -15,6 +16,8 @@ websocket_connections = {}
 users_ws = {}
 
 # b'\r\n\r\nusername=hello&password=there'
+
+
 def getUserInfo(body: bytes):
     body = body.decode().strip()
     idxUser = body.find("username=") + len("username=")
@@ -23,6 +26,7 @@ def getUserInfo(body: bytes):
     password = body[idxPass + len("password="):]
     return [username, password]
 # Keep collection of currently logged in users
+
 
 online_users = {}
 online_users_id = {}
@@ -35,8 +39,18 @@ def route_path(data, handler):
     if path == "/":
         # return get_html(headers)
         if type == "GET":
-            if headers.get("cookies", "") != "":
-                pass
+            print('---------------requestDict----------')
+            print(request_dict)
+            print('++++++++++++++++++++++++++++++++++++')
+            cookie = headers.get("Cookie", "")
+            if cookie != "":
+                print(cookie)
+                auth_token = cookie.split("=")[1]
+                print("Auth-Token", auth_token)
+                # if auth-token in database send the chatpage
+                userInfo = database.getUser(auth_token)
+                if userInfo != "":
+                    return get_html_file("/src/html/chatpage.html", headers)
             return get_html_file("/src/html/index.html", headers)
         if type == "POST":
             print("body---Body-------", body)
@@ -46,13 +60,21 @@ def route_path(data, handler):
             password = userInfo[1]
             print(storage)
             if {"username": username, "password": password} in storage:
-            # if database.check_user(username, password):
+                # if database.check_user(username, password):
                 auth_token = authentication.gen_authToken()
                 # database.create_authToken(username, auth_token)
-                cookie = cookies.set_cookie("Auth-Token=%s" % auth_token)
-                contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + cookie
+                # add username cookie
+                user_cookie = cookies.set_cookie("Username=%s" % username)
+                # the above add the token to db with key "authToken"
+                cookie = cookies.set_cookie(
+                    "Auth-Token=%s" % auth_token, options='; HttpOnly')
+                hashedToken = authentication.get_saltedhash(auth_token)[
+                    "saltedhash"]
+                storage_tokens.append({"authToken": hashedToken})
+                contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + \
+                    cookie + user_cookie
                 body = get_body("./src/html/chatpage.html")
-                return response.get_response(body,"200 OK", contentType)
+                return response.get_response(body, "200 OK", contentType)
                 # return get_html_file("/src/html/chatpage.html", cookie)
                 # send the http request of the chatpage, and set auth-token cookie
             else:
@@ -123,7 +145,7 @@ def route_path(data, handler):
     elif path == "/userchat":
         return chat(request_dict["multi-part"], headers)
     elif path == "/websocket":
-        return websocket_upgrade(request_dict["header"]["Sec-WebSocket-Key"], handler)
+        return websocket_upgrade(request_dict["header"]["Sec-WebSocket-Key"], handler, headers)
     else:
         return four_o_four()
 
@@ -485,7 +507,7 @@ def chat(formdata, headers):
         return response.get_response(body, response_code)
 
 
-def websocket_upgrade(headers, handler):
+def websocket_upgrade(headers, handler, request_header):
     print("sending websocket upgrade request")
     # print(headers)
     accept = websocket.generate_accept(headers)
@@ -499,7 +521,13 @@ def websocket_upgrade(headers, handler):
     """ lobal count
     count += 1 """
     # print(count)
-    username = "User" + str(random.randint(0, 1000))
+    cookies = request_header.get('Cookie', '')
+    username = cookies[cookies.find("Username=")+len("Username="):]
+    if username.find(';') != -1:
+        username = username[:username.find(';')]
+    print("Got the Username:", username)
+    #username = "User" + str(random.randint(0, 1000))
+
     user_connections[username] = handler
     #users[username] = handler
     websocket_connections[handler] = username
@@ -530,7 +558,7 @@ def register(information):
     userInfo = {"user": user, "pass": password, "pass2": password2}
     if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
         if userInfo["pass"] == userInfo["pass2"]:
-           response_code = '301 Moved Permanently'
+            response_code = '301 Moved Permanently'
         body = b''
         content_type = 'text/plain; charset=utf-8\r\nLocation: /'
         storage.append({"username": user, "password": password})
