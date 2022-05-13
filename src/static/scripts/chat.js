@@ -1,3 +1,5 @@
+console.log("Starting Script");
+// getOnlineUsers();
 const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 function sendMessage() {
@@ -23,8 +25,11 @@ function addMessage(chatMessage) {
     let chatview = document.getElementsByClassName('chat-view')[0];
     const newDiv = document.createElement('div');
     newDiv.classList.add("chat-message");
+    const nameColor = getUsernameColor(chatMessage['color']);
 
-    newDiv.innerHTML = ("<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>");
+    newDiv.innerHTML = `<b class=${nameColor}>${chatMessage['username']}</b> ${chatMessage["comment"]}<br/>`
+
+    // newDiv.innerHTML = ("<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>");
     chatview.prepend(newDiv);
 
     // chatview.innerHTML += "<b>" + chatMessage['username'] + "</b>: " + chatMessage["comment"] + "<br/>";
@@ -89,6 +94,16 @@ socket.onmessage = function (ws_message) {
 */
 function addOnlineUser(user) {
     const userList = document.getElementsByClassName('user-list-view')[0];
+    const onlineUsers = userList.querySelectorAll('.user-list-item');
+
+    for (u of onlineUsers) {
+        console.log("inner text", u.innerText);
+        if (u.innerText === user['username']) {
+            console.log(`Duplicate: ${u.username}`);
+            return;
+        }
+    }
+
     const newDiv = document.createElement('div');
     newDiv.classList.add("user-list-item");
 
@@ -97,10 +112,35 @@ function addOnlineUser(user) {
     if (!userAvatar) userAvatar = defaultImage;
 
     const username = user['username'];
+    const nameColor = getUsernameColor(user['color']);
 
-    newDiv.innerHTML = `<img src="${userAvatar}" alt="${username}'s avatar" class="avatar" /><b>${username}</b>`;
+    newDiv.innerHTML = `<img src="${userAvatar}" alt="${username}'s avatar" class="avatar" /><b class="${nameColor}">${username}</b>`;
 
     userList.append(newDiv);
+}
+
+function getUsernameColor(user) {
+    const color = user['color'];
+    switch(color) {
+        case "black":
+            return "username-black";
+            break;
+        case "red":
+            return "username-red";
+            break;
+        case "green":
+            return "username-green";
+            break;
+        case "blue":
+            return "username-blue";
+            break;
+        case "purple":
+            return "username-purple";
+        case "pink":
+            return "username-black";
+        default:
+            return "username-black";
+    }
 }
 
 /*
@@ -114,22 +154,32 @@ function removeOnlineUser(user) {
     const userList = document.getElementsByClassName('user-list-item');
     let divToDelete;
     for (let u of userList) {
-        console.log(`Iterating: ${u.innerText}`)
+        console.log(`Want to delete ${user.username}     -       Iterating: ${u.innerText}`)
         if (u.innerText === user['username'])
             divToDelete = u;
     }
-    if (divToDelete)
+    if (divToDelete) {
+        console.log(`Deleting: ${divToDelete.innerText}`);
         divToDelete.remove();
+    }
+}
+
+function removeAllUsers() {
+    const userList = document.getElementsByClassName('user-list-item');
+    for (let u of userList) {
+         u.remove();
+    }
 }
 
 // called when the page loads to get the online users
 function getOnlineUsers() {
     const request = new XMLHttpRequest();
-    request.onreadystatechange = () => {
+    request.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
             console.log(`response: ${this.response}`);
             const users = JSON.parse(this.response);
             for (let user of users) {
+                console.log(`Adding User ${user.username}`);
                 addOnlineUser(user);
             }
         }
@@ -140,6 +190,7 @@ function getOnlineUsers() {
 
 function initializePage() {
     // get_chat_history();`
+    console.log("Initializing...");
     getOnlineUsers();
 }
 
