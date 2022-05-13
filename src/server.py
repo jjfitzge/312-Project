@@ -130,7 +130,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     print("user is sending a direct message")
                     toUser = json.loads(frame_dict["data"])['toUser']
                     send_frame = websocket.generate_dm_frame(
-                        frame_dict["data"], paths.websocket_connections[self])
+                        frame_dict["data"], paths.websocket_connections[self], toUser)
                     # Send the message
                     print("Sending a direct message to the users",
                           paths.websocket_connections)
@@ -140,6 +140,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     print("Open Dm's", paths.open_dms)
                     paths.user_connections[toUser].request.sendall(send_frame)
                     # Send the notications frame
+                    print("This is the frame being sent for notifications", websocket.gen_user_payload(
+                        'recievedNotif', paths.websocket_connections[self], color='red'))
                     send_frame = websocket.generate_frame(
                         websocket.gen_user_payload('recievedNotif', paths.websocket_connections[self], color='red'), paths.websocket_connections[self])
                     print("Sending a notification message to the users",

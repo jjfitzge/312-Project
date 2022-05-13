@@ -214,6 +214,8 @@ def parse_frame_message(message, username, toUser=None):
         return json_util.dumps(message).encode()
     elif message["messageType"] == 'removeOnlineUser':
         return json_util.dumps(message).encode()
+    elif message["messageType"] == 'recievedNotif':
+        return json_util.dumps(message).encode()
 
 
 # -----For Testing Purposes---
@@ -357,7 +359,7 @@ def gen_user_payload(messageType: str, username: str, src=None, color=None):
     # Get user info from database (img_src, color)
     if messageType == 'addOnlineUser':
         return json.dumps({'messageType': messageType, 'username': username, "img_src": src, 'color': color})
-    if messageType == 'recieveNotif':
+    if messageType == 'recievedNotif':
         return json.dumps({'messageType': messageType, 'username': username, 'color': color})
     else:
         return json.dumps({'messageType': messageType, 'username': username})
