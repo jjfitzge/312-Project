@@ -7,6 +7,7 @@ import random
 
 
 storage = []
+storage_tokens = []
 users = {}
 users_tokens = {}
 chat_history = {}
@@ -38,8 +39,18 @@ def route_path(data, handler):
     if path == "/":
         # return get_html(headers)
         if type == "GET":
-            if headers.get("cookies", "") != "":
-                pass
+            print('---------------requestDict----------')
+            print(request_dict)
+            print('++++++++++++++++++++++++++++++++++++')
+            cookie = headers.get("Cookie", "")
+            if cookie != "":
+                print(cookie)
+                auth_token = cookie.split("=")[1]
+                print("Auth-Token", auth_token)
+                # if auth-token in database send the chatpage
+                userInfo = database.getUser(auth_token)
+                if userInfo != "":
+                    return get_html_file("/src/html/chatpage.html", headers)
             return get_html_file("/src/html/index.html", headers)
         if type == "POST":
             print("body---Body-------", body)
@@ -52,10 +63,14 @@ def route_path(data, handler):
                 # if database.check_user(username, password):
                 auth_token = authentication.gen_authToken()
                 # database.create_authToken(username, auth_token)
-                cookie = cookies.set_cookie(
-                    "Auth-Token=%s" % auth_token, options='; HttpOnly')
                 # add username cookie
                 user_cookie = cookies.set_cookie("Username=%s" % username)
+                # the above add the token to db with key "authToken"
+                cookie = cookies.set_cookie(
+                    "Auth-Token=%s" % auth_token, options='; HttpOnly')
+                hashedToken = authentication.get_saltedhash(auth_token)[
+                    "saltedhash"]
+                storage_tokens.append({"authToken": hashedToken})
                 contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + \
                     cookie + user_cookie
                 body = get_body("./src/html/chatpage.html")

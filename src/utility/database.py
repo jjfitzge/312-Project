@@ -1,6 +1,8 @@
 
+import bcrypt
 from pymongo import MongoClient
-from . import authentication
+from . import authentication, paths
+
 
 
 mongo_client = MongoClient("mongo")
@@ -154,3 +156,25 @@ def check_token(username, token):
             print("User is Authenticated")
             return True
     return False
+
+    # def getUser(authToken):
+    # listDic = list(db.collection.find({}, {"_id": 0}))
+    # for dic in listDic:
+    #     if bcrypt.checkpw(authToken.encode(), dic['Auth-Token']):
+    #         return dic['username']
+    # return ""
+
+def getUser(token):
+    # Match username and salted hash password
+    # Get record for username and password
+    query = {"authToken": token}
+    # print(query)
+    # doc = list(users.find(query))
+    # list of dic
+    doc = paths.storage_tokens
+    print("storageTokens in database", doc)
+    for x in doc:
+        print(x)
+        if bcrypt.checkpw(token.encode(), x["authToken"]):
+            return x
+    return ""
