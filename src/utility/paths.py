@@ -56,6 +56,7 @@ def route_path(data, handler):
                 print("Auth-Token", auth_token)
                 # if auth-token in database send the chatpage
                 userInfo = database.getUser(auth_token)
+                print("USERINFOOOOOOO", userInfo)
                 if userInfo != "":
                     return get_html_file("/src/html/chatpage.html", headers)
             return get_html_file("/src/html/index.html", headers)
@@ -105,7 +106,7 @@ def route_path(data, handler):
             return get_html_file("/src/html/register.html", headers)
         elif type == "POST":
             d = request_dict["multi-part"].values()
-            print("HEADINGGGGGGGGG", d) 
+            # print("HEADINGGGGGGGGG", d) 
             user = ""
             password = ""
             password2 = ""
