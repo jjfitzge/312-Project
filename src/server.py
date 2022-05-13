@@ -5,6 +5,7 @@ import sys
 from utility import paths
 from utility import request
 from utility import websocket
+from utility import response
 import json
 from bson import json_util
 
@@ -94,13 +95,25 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     for user in paths.websocket_connections.keys():
                         if user != self:
                             user.request.sendall(send_frame)
-                elif json.loads(frame_dict["data"])['messageType'] == 'directMsg':
+                elif json.loads(frame_dict["data"])['messageType'] == 'initDM':
                     print("This is a direct message")
                     # Get the username of who the message is for
                     toUser = json.loads(frame_dict["data"])['toUser']
-                    send_frame = websocket.generate_frame(
+                    # Handle dm
+                    websocket.handle_dm(
+                        paths.websocket_connections[self], toUser)
+                    """ send_frame = websocket.generate_frame(
                         frame_dict["data"], paths.websocket_connections[self])
-                    paths.user_connections[toUser].request.sendall(send_frame)
+                    paths.user_connections[toUser].request.sendall(send_frame) """
+                    """ response_code = '301 Moved Permanently'
+                    body = b''
+                    content_type = 'text/plain; charset=utf-8\r\nLocation: /dm'
+                    # Remove from DS
+                    paths.user_connections.pop(username)
+                    paths.websocket_connections.pop(self)
+                    # paths.online_users.pop(self)
+                    self.request.sendall(response.get_response(
+                        body, response_code, content_type)) """
 
                 else:
                     send_frame = websocket.generate_frame(
@@ -118,6 +131,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     for user in paths.websocket_connections.keys():
                         sys.stdout.flush()
                         user.request.sendall(send_frame)
+
         else:
             sys.stdout.flush()
             sys.stdout.flush()

@@ -1,6 +1,8 @@
 from email import header
 from importlib.resources import path
 import json
+
+from flask import redirect
 from . import response, database, request, template, authentication, cookies, websocket
 from bson import json_util
 import random
@@ -89,7 +91,7 @@ def route_path(data, handler):
         return get_js(path)
     elif path == "/static/styles/sidebar.css":
         return get_css(path)
-    elif path == "/static/scripts/sidebar.css":
+    elif path == "/static/scripts/sidebar.js":
         return get_js(path)
     elif path == "/src/html/chatpage.html":
         return get_html_file(path, headers)
@@ -124,6 +126,15 @@ def route_path(data, handler):
         return user_upload(request_dict["multi-part"])
     elif path == "/online-users":
         return get_online_users()
+    elif path == "/dm":
+        print("Trying to get dm page")
+        return get_html_file("/src/html/dm.html", headers)
+    elif path == "/redirectdm":
+        return redirect_dm()
+    elif path == "/static/scripts/dm.js":
+        return get_js(path)
+    elif path == "/static/styles/dm.css":
+        return get_css(path)
     elif path == "/users":
         if type == "GET":
             return retrieve_all()
@@ -154,7 +165,7 @@ def route_path(data, handler):
 
 def get_body(filename):
     valid_files = ['./src/static/images/favicon.ico', './src/static/images/hero.jpg', './src/static/images/walrusicon.png', './src/static/images/walruslogo.png', './src/static/scripts/chat.js', './src/static/scripts/sidebar.js', './src/static/styles/chatpage.css', './src/static/styles/index.css',
-                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html']
+                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html', './src/static/scripts/dm.js', './src/static/styles/dm.css']
     # Comment out Database
     # valid_files += database.list_img()
     # print(filename)
@@ -575,3 +586,10 @@ def get_online_users():
     print(type(retval))
     print(json_util.dumps(retval).encode())
     return response.get_response(json_util.dumps(retval).encode(), '200 OK')
+
+
+def redirect_dm():
+    response_code = '301 Moved Permanently'
+    body = b''
+    content_type = 'text/plain; charset=utf-8\r\nLocation: /dm'
+    return response.get_response(body, response_code, content_type)
