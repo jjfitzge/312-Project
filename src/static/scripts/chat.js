@@ -112,6 +112,7 @@ function addOnlineUser(user) {
     if (!userAvatar) userAvatar = defaultImage;
 
     const username = user['username'];
+    newDiv.setAttribute("onclick", "goToDM(this.innerText);")
     const nameColor = getUsernameColor(user['color']);
 
     newDiv.innerHTML = `<img src="${userAvatar}" alt="${username}'s avatar" class="avatar" /><b class="${nameColor}">${username}</b>`;
@@ -194,6 +195,12 @@ function initializePage() {
     getOnlineUsers();
 }
 
+function goToDM(username) {
+    console.log(`went to dm ${username}`)
+    if (username) {
+        socket.send(JSON.stringify({'messageType': 'initDM', 'toUser': username}));
+    }
+}
 
 
 
