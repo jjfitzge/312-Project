@@ -28,9 +28,23 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             sys.stdout.flush()
             sys.stdout.flush()
         # Commenting out Databse
-        # database.init_db()
+
+
+        #database.init_db()
         sys.stdout.flush()
         sys.stdout.flush()
+        #test database stuff here 
+        #cd into src before docker compose up --build , deactivate, dockercompose down. 
+
+
+        #database.onlytest.insert_one({"data": 0})
+        #print(database.onlytest)
+
+        #
+
+
+
+
 
         request_dict = request.new_parse(full_response)
         # Start routing requests after response if fully parsed
@@ -122,6 +136,9 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             sys.stdout.flush()
             sys.stdout.flush()
             self.request.sendall(response_back)
+
+
+
 
 
 if __name__ == "__main__":

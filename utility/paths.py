@@ -50,8 +50,8 @@ def route_path(data, handler):
                 # if auth-token in database send the chatpage
                 userInfo = database.getUser(auth_token)
                 if userInfo != "":
-                    return get_html_file("/src/html/chatpage.html", headers)
-            return get_html_file("/src/html/index.html", headers)
+                    return get_html_file("./html/chatpage.html", headers)    ###############################################
+            return get_html_file("./html/index.html", headers)               ##############################################
         if type == "POST":
             print("body---Body-------", body)
             userInfo = getUserInfo(body)
@@ -73,15 +73,15 @@ def route_path(data, handler):
                 storage_tokens.append({"authToken": hashedToken})
                 contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + \
                     cookie + user_cookie
-                body = get_body("./src/html/chatpage.html")
+                body = get_body("./src/html/chatpage.html")  ###################################################
                 return response.get_response(body, "200 OK", contentType)
                 # return get_html_file("/src/html/chatpage.html", cookie)
                 # send the http request of the chatpage, and set auth-token cookie
             else:
-                return get_html_file("/src/html/index.html", headers)
-    elif path == "/static/styles/index.css":
+                return get_html_file("./html/index.html", headers)        ###########################################
+    elif path == "/static/styles/index.css":                                   ####################################
         return get_css(path)
-    elif path == "src/html/register.html":
+    elif path == "./html/register.html":
         return get_html_file(path, headers)
     elif path == "/static/styles/chatpage.css":
         return get_css(path)
@@ -91,15 +91,15 @@ def route_path(data, handler):
         return get_css(path)
     elif path == "/static/scripts/sidebar.css":
         return get_js(path)
-    elif path == "/src/html/chatpage.html":
+    elif path == "./html/chatpage.html":
         return get_html_file(path, headers)
     elif path == "/register":
         if type == "GET":
-            return get_html_file("/src/html/register.html", headers)
+            return get_html_file("./html/register.html", headers)
         elif type == "POST":
             return register(body)
     elif path == "/chat":
-        return get_html_file("/src/html/chatpage.html", headers)
+        return get_html_file("./html/chatpage.html", headers)
     elif path == "/static/scripts/chat.js":
         return get_js(path)
     elif path == "/style.css":
@@ -264,25 +264,25 @@ def get_html(headers):
 
 
 def get_css(path):
-    body: bytes = get_body('./src'+path)
+    body: bytes = get_body(path)
     content_type = 'text/css; charset=utf-8\r\nX-Content-Type-Options: nosniff'
     return response.get_response(body, content_type=content_type)
 
 
 def get_js(path):
-    body: bytes = get_body('./src'+path)
+    body: bytes = get_body(path)
     content_type = 'text/javascript; charset=utf-8\r\nX-Content-Type-Options: nosniff'
     return response.get_response(body, content_type=content_type)
 
 
 def get_icon():
-    body: bytes = get_body('./src/static/images/favicon.ico')
+    body: bytes = get_body('./static/images/favicon.ico')
     content_type = '"image/x-icon"; charset=utf-8\r\nX-Content-Type-Options: nosniff'
     return response.get_response(body, content_type=content_type)
 
 
 def get_img(img_path, type):
-    body: bytes = get_body('./src/static/images'+img_path)
+    body: bytes = get_body('./static/images'+img_path)
     if body == False:
         return four_hundred()
     else:
@@ -346,7 +346,7 @@ def user_upload(formdata):
             if data_heading["name"] == "comment":
                 comment = data["body"]
             elif data_heading["name"] == "upload":
-                with open('./src/static/images/'+img_path+'.jpg', 'wb') as f:
+                with open('./static/images/'+img_path+'.jpg', 'wb') as f:
                     f.write(data["body"])
 
     #database.create_msg(comment, img_path)
