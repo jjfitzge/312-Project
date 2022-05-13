@@ -10,7 +10,7 @@
     <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="static/styles/index.css">
     <link rel="stylesheet" type="text/css" href="static/styles/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="static/styles/chatpage.css">
+    <link rel="stylesheet" type="text/css" href="static/styles/dm.css">
 </head>
 <body onload="initializePage();">
 <!-- <body> -->
@@ -69,35 +69,6 @@
     </div>
 </div>
 <div class="chat-container">
-    <div class="notifications-container">
-        <div class="notification">User has sent you a message!</div>
-        <div class="notification">Geralt has sent you a message!</div>
-    </div>
-    <div class="chat">
-        <div class="chat-box">
-            <div class="chat-heading">
-                <div class="heading">Chat</div>
-            </div>
-            <div class="chat-content">
-                <div class="chat-view">
-                </div>
-                <div class="chat-send-box">
-                    <input id="send-input" type="text" name="send-input">
-                    <button class="send-button" onclick="sendMessage()">SEND</button>
-                </div>
-            </div>
-        </div>
-        <div class="user-list">
-            <div class="user-list-heading">
-                <div class="heading">Online</div>
-            </div>
-            <div class="user-list-view">
-            </div>
-            <button onclick="removeAllUsers()">DELETE</button>
-            <button onclick="addTestMessage()">Test Message</button>
-        </div>
-    </div>
-
 
 
 </div>
@@ -105,6 +76,6 @@
 
 </body>
 <script src="../static/scripts/sidebar.js"></script>
-<script src="../static/scripts/chat.js"></script>
+<script src="../static/scripts/dm.js"></script>
 <!-- <script src="../static/scripts/sidebar.js"></script> -->
 </html>
