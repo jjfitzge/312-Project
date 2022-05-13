@@ -1,5 +1,3 @@
-console.log("Starting Script");
-// getOnlineUsers();
 const socket = new WebSocket('ws://' + window.location.host + '/websocket');
 
 function sendMessage() {
@@ -65,19 +63,22 @@ socket.onmessage = function (ws_message) {
         case 'removeOnlineUser':
             removeOnlineUser(message);
             break;
-        case 'webRTC-offer':
-            webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
-            webRTCConnection.createAnswer().then(answer => {
-                webRTCConnection.setLocalDescription(answer);
-                socket.send(JSON.stringify({'messageType': 'webRTC-answer', 'answer': answer}));
-            });
+        case 'receivedNotif':
+            showNotification(message);
             break;
-        case 'webRTC-answer':
-            webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
-            break;
-        case 'webRTC-candidate':
-            webRTCConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
-            break;
+        // case 'webRTC-offer':
+        //     webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
+        //     webRTCConnection.createAnswer().then(answer => {
+        //         webRTCConnection.setLocalDescription(answer);
+        //         socket.send(JSON.stringify({'messageType': 'webRTC-answer', 'answer': answer}));
+        //     });
+        //     break;
+        // case 'webRTC-answer':
+        //     webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
+        //     break;
+        // case 'webRTC-candidate':
+        //     webRTCConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
+        //     break;
         default:
             console.log(`received an invalid WS messageType: ${messageType}`);
     }
@@ -112,6 +113,7 @@ function addOnlineUser(user) {
     if (!userAvatar) userAvatar = defaultImage;
 
     const username = user['username'];
+    newDiv.setAttribute("onclick", "goToDM(this.innerText);")
     const nameColor = getUsernameColor(user['color']);
 
     newDiv.innerHTML = `<img src="${userAvatar}" alt="${username}'s avatar" class="avatar" /><b class="${nameColor}">${username}</b>`;
@@ -194,6 +196,17 @@ function initializePage() {
     getOnlineUsers();
 }
 
+function goToDM(username) {
+    console.log(`went to dm ${username}`)
+    if (username) {
+        socket.send(JSON.stringify({'messageType': 'initDM', 'toUser': username}));
+    }
+}
+
+function showNotification() {
+    const content = document.querySelector(".chat-container");
+
+}
 
 
 
