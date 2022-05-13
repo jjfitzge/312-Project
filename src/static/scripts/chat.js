@@ -66,19 +66,6 @@ socket.onmessage = function (ws_message) {
         case 'receivedNotif':
             showNotification(message);
             break;
-        // case 'webRTC-offer':
-        //     webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
-        //     webRTCConnection.createAnswer().then(answer => {
-        //         webRTCConnection.setLocalDescription(answer);
-        //         socket.send(JSON.stringify({'messageType': 'webRTC-answer', 'answer': answer}));
-        //     });
-        //     break;
-        // case 'webRTC-answer':
-        //     webRTCConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
-        //     break;
-        // case 'webRTC-candidate':
-        //     webRTCConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
-        //     break;
         default:
             console.log(`received an invalid WS messageType: ${messageType}`);
     }
@@ -203,9 +190,19 @@ function goToDM(username) {
     }
 }
 
-function showNotification() {
-    const content = document.querySelector(".chat-container");
+function showNotification(fromUser) {
+    if (!fromUser) return;
 
+    const notifications = document.querySelector(".notifications-container");
+    const username = fromUser.username;
+
+    const newNotif = document.createElement('div');
+    newNotif.classList.add("notification");
+    newNotif.setAttribute("onclick", `goToDM("${username}");`)
+    
+
+    newNotif.innerHTML = `${username} has sent you a message!`;
+    notifications.append(newNotif);
 }
 
 
