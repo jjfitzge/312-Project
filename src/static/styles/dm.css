@@ -1,0 +1,23 @@
+
+.dm-container {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.open-dms {
+    width: 35%;
+    background-color: pink;
+
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.dm-pane {
+    width: 65%;
+    background-color: lavender;
+}
