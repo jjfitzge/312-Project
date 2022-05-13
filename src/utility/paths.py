@@ -104,7 +104,39 @@ def route_path(data, handler):
         if type == "GET":
             return get_html_file("/src/html/register.html", headers)
         elif type == "POST":
-            return register(body)
+            d = request_dict["multi-part"].values()
+            print("HEADINGGGGGGGGG", d) 
+            user = ""
+            password = ""
+            password2 = ""
+            imagePath = ""
+            for dic in d:
+                if dic['heading']['name'] == "user":
+                    user = dic['body']
+                if dic['heading']['name'] == "pass":
+                    password = dic['body']
+                if dic['heading']['name'] == "pass2":
+                    password2 = dic['body']
+                if dic['heading']['name'] == "upload":
+                    imagePath = user_upload(request_dict["multi-part"])
+                userInfo = {"user": user, "pass": password, "pass2": password2, "imagePath" : imagePath}
+                print( "UserInfo__________",userInfo)
+                if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
+                    if userInfo["pass"] == userInfo["pass2"]:
+                        response_code = '301 Moved Permanently'
+                    body = b''
+                    content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+                    storage.append({"username": user, "password": password})
+                    print("storage in register", storage)
+                    # database.create_user(userInfo['user'], userInfo["pass"])
+                    return response.get_response(body, response_code, content_type)
+            response_code = '301 Moved Permanently'
+            body = b''
+            content_type = 'text/plain; charset=utf-8\r\nLocation: /register'
+            return response.get_response(body, response_code, content_type)
+
+            pass
+            # return register(d)
     elif path == "/chat":
         return get_html_file("/src/html/chatpage.html", headers)
     elif path == "/static/scripts/chat.js":
@@ -368,12 +400,12 @@ def user_upload(formdata):
             elif data_heading["name"] == "upload":
                 with open('./src/static/profiles/'+img_path+'.jpg', 'wb') as f:
                     f.write(data["body"])
-
     #database.create_msg(comment, img_path)
-    response_code = '301 Moved Permanently'
-    body = b''
-    content_type = 'text/plain; charset=utf-8\r\nLocation: /'
-    return response.get_response(body, response_code, content_type)
+    # response_code = '301 Moved Permanently'
+    # body = b''
+    # content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+    # return response.get_response(body, response_code, content_type)
+    return './src/static/profiles/'+img_path+'.jpg'
     """ else:
         response_code = '403 Forbidden'
         body = b'request was rejected'
@@ -566,23 +598,30 @@ def retrieve_messages():
 
 
 def register(information):
-    information = information.decode()
-    idxUser = information.find("user=")
-    idxPass = information.find("pass=")
-    idxPass2 = information.find("pass2=")
-    user = information[idxUser + len("user="):idxPass].replace("&", "")
-    password = information[idxPass + len("pass="): idxPass2].replace("&", "")
-    password2 = information[idxPass2 + len("pass2="):].replace("&", "")
-    userInfo = {"user": user, "pass": password, "pass2": password2}
-    if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
-        if userInfo["pass"] == userInfo["pass2"]:
-            response_code = '301 Moved Permanently'
-        body = b''
-        content_type = 'text/plain; charset=utf-8\r\nLocation: /'
-        storage.append({"username": user, "password": password})
-        print("storage in register", storage)
-        # database.create_user(userInfo['user'], userInfo["pass"])
-        return response.get_response(body, response_code, content_type)
+    user = ""
+    password = ""
+    password2 = ""
+    print(information)
+    if len(information.values()) > 1:
+        for dic in information.values():
+            print("dcitionary",dic)
+            # if dic['heading']['name'] == "user":
+            #     user = dic['body']
+            # if dic['heading']['name'] == "pass":
+            #     password = dic['body']
+            # if dic['heading']['name'] == "pass2":
+            #     password2 = dic['body']
+        userInfo = {"user": user, "pass": password, "pass2": password2}
+        print( "UserInfo__________",userInfo)
+        if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
+            if userInfo["pass"] == userInfo["pass2"]:
+                response_code = '301 Moved Permanently'
+            body = b''
+            content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+            storage.append({"username": user, "password": password})
+            print("storage in register", storage)
+            # database.create_user(userInfo['user'], userInfo["pass"])
+            return response.get_response(body, response_code, content_type)
     response_code = '301 Moved Permanently'
     body = b''
     content_type = 'text/plain; charset=utf-8\r\nLocation: /register'
