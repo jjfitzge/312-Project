@@ -136,7 +136,7 @@ def route_path(data, handler):
     elif path == "/redirectdm":
         return redirect_dm()
     elif path == "/open-dms":
-        return get_dm_history(handler)
+        return get_dm_history(headers)
     elif path == "/static/scripts/dm.js":
         return get_js(path)
     elif path == "/static/styles/dm.css":
@@ -601,7 +601,14 @@ def redirect_dm():
     return response.get_response(body, response_code, content_type)
 
 
-def get_dm_history(handler):
+def get_dm_history(request_header):
     # from DS get the specfied user's collection
-    username = websocket_connections[handler]
+    print(websocket_connections)
+    cookies = request_header.get('Cookie', '')
+    username = cookies[cookies.find("Username=")+len("Username="):]
+    if username.find(';') != -1:
+        username = username[:username.find(';')]
+    print("Got the Username:", username)
+    print("username", username)
+    print(open_dms)
     return response.get_response(json_util.dumps(open_dms[username]).encode(), '200 OK')
