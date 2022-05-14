@@ -1,4 +1,4 @@
-body { /* Do a grid container if this doesn't work */
+body {
     display: flex;
     flex-direction: row;
 }

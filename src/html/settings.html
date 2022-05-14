@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="static/styles/index.css">
     <link rel="stylesheet" type="text/css" href="static/styles/sidebar.css">
     <link rel="stylesheet" type="text/css" href="static/styles/chatpage.css">
+    <link rel="stylesheet" type="text/css" href="static/styles/settings.css">
 </head>
 <body onload="">
 <!-- <body> -->
@@ -70,20 +71,32 @@
 </nav>
 
 <div class="settings-container">
-    <form action="/set-color" method="POST" class="login-form">
-        <input id="black" type="radio" name="color" value="black"/>
-        <label for="black">Black</label><br/>
-        <input id="green" type="radio" name="color" value="green"/>
-        <label for="green">Green</label><br/>
-        <input id="red" type="radio" name="color" value="red"/>
-        <label for="red">Red</label><br/>
-        <input id="blue" type="radio" name="color" value="blue"/>
-        <label for="blue">Blue</label><br/>
-        <input id="purple" type="radio" name="color" value="purple"/>
-        <label for="purple">Purple</label><br/>
-        <input id="pink" type="radio" name="color" value="pink"/>
-        <label for="pink">Pink</label><br/>
-        <input type="submit" value="Set Color">
+    <form action="/set-color" method="POST" class="color-form" enctype="multipart/form-data">
+        <div class="color-form-item">
+            <input id="black" type="radio" name="color" value="black"/>
+            <label for="black">Black</label>
+        </div>
+        <div class="color-form-item">
+            <input id="green" type="radio" name="color" value="green"/>
+            <label for="green">Green</label>
+        </div>
+        <div class="color-form-item">
+            <input id="red" type="radio" name="color" value="red"/>
+            <label for="red">Red</label>
+        </div>
+        <div class="color-form-item">
+            <input id="blue" type="radio" name="color" value="blue"/>
+            <label for="blue">Blue</label>
+        </div>
+        <div class="color-form-item">
+            <input id="purple" type="radio" name="color" value="purple"/>
+            <label for="purple">Purple</label>
+        </div>
+        <div class="color-form-item">
+            <input id="pink" type="radio" name="color" value="pink"/>
+            <label for="pink">Pink</label>
+        </div>
+        <input type="submit" value="Set Color" class="solor-button">
         </div>
       </form>
 </div>
