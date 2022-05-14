@@ -358,7 +358,7 @@ def generate_webrtc_frame(payload, opcode=129):
 def gen_user_payload(messageType: str, username: str, src=None, color=None, msg=None):
     # Get user info from database (img_src, color)
     if messageType == 'addOnlineUser':
-        return json.dumps({'messageType': messageType, username: username, "img_src": src, 'color': color})
+        return json.dumps({'messageType': messageType, "username": username, "img_src": src, 'color': color})
     if messageType == 'receivedNotif':
         msg = msg.replace('&', '&amp;')
         msg = msg.replace('<', '&lt;')

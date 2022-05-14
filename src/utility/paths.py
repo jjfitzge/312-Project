@@ -705,3 +705,7 @@ def get_color(formdata, request_header):
             if data_heading['name'] == "color":
                 color = data["body"]
                 database.update_user(username, color)
+    response_code = '301 Moved Permanently'
+    body = b''
+    content_type = 'text/plain; charset=utf-8\r\nLocation: /settings'
+    return response.get_response(body, response_code, content_type)

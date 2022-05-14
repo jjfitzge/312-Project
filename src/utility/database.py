@@ -195,7 +195,7 @@ def getUserbyUser(username):
 
 
 def update_user(username, color):
-    data = getUserbyUser(username)
-    data['color'] = color
+
     query = {"username": username}
-    users.update_one(query, data)
+    new_values = {"$set": {'color': color}}
+    users.update_one(query, new_values)
