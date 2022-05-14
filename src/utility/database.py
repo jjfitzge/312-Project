@@ -168,12 +168,26 @@ def getUser(token):
     # Get record for username and password
     query = {"authToken": token}
     # print(query)
-    # doc = list(users.find(query))
+    doc = list(users.find(query))
     # list of dic
-    doc = paths.storage_tokens
+    # doc = paths.storage_tokens
     print("storageTokens in database", doc)
     for x in doc:
         print(x)
         if bcrypt.checkpw(token.encode(), x["authToken"]):
+            return x
+    return ""
+
+    
+def getUserbyUser(username):
+    # Match username and salted hash password
+    # Get record for username and password
+    query = {"username": username}
+    # print(query)
+    doc = list(users.find(query))
+    # list of dic
+    # doc = paths.storage_tokens
+    print("storageTokens in database", doc)
+    for x in doc:
             return x
     return ""

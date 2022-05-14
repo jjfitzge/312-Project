@@ -3,7 +3,6 @@ body { /* Do a grid container if this doesn't work */
     flex-direction: row;
 }
 
-
 .video-container {
     width: 100%;
     min-height: 100vh;

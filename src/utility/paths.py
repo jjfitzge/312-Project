@@ -2,7 +2,7 @@ from email import header
 from importlib.resources import path
 import json
 
-from flask import redirect
+# from flask import redirect
 from . import response, database, request, template, authentication, cookies, websocket
 from bson import json_util
 import random
@@ -62,10 +62,10 @@ def route_path(data, handler):
             username = userInfo[0]
             password = userInfo[1]
             print(storage)
-            if {"username": username, "password": password} in storage:
-                # if database.check_user(username, password):
+            # if {"username": username, "password": password} in storage:
+            if database.check_user(username, password):
                 auth_token = authentication.gen_authToken()
-                # database.create_authToken(username, auth_token)
+                database.create_authToken(username, auth_token)
                 # add username cookie
                 user_cookie = cookies.set_cookie("Username=%s" % username)
                 # the above add the token to db with key "authToken"
@@ -122,15 +122,14 @@ def route_path(data, handler):
                         response_code = '301 Moved Permanently'
                     body = b''
                     content_type = 'text/plain; charset=utf-8\r\nLocation: /'
-                    storage.append({"username": user, "password": password})
-                    print("storage in register", storage)
-                    # database.create_user(userInfo['user'], userInfo["pass"])
+                    # storage.append({"username": user, "password": password})
+                    # print("storage in register", storage)
+                    database.create_user(userInfo['user'], userInfo["pass"], imagePath)
                     return response.get_response(body, response_code, content_type)
             response_code = '301 Moved Permanently'
             body = b''
             content_type = 'text/plain; charset=utf-8\r\nLocation: /register'
             return response.get_response(body, response_code, content_type)
-
             pass
             # return register(d)
     elif path == "/chat":
@@ -177,6 +176,10 @@ def route_path(data, handler):
         return get_css(path)
     elif path == "/static/scripts/video.js":
         return get_js(path)
+    elif path == "/settings":
+        return get_html_file("/src/html/settings.html", headers)
+    elif path == "/static/scripts/settings.js":
+        return get_js(path)
     elif path == "/users":
         if type == "GET":
             return retrieve_all()
@@ -207,7 +210,7 @@ def route_path(data, handler):
 
 def get_body(filename):
     valid_files = ['./src/static/images/favicon.ico', './src/static/images/hero.jpg', './src/static/images/walrusicon.png', './src/static/images/walruslogo.png', './src/static/scripts/chat.js', './src/static/scripts/sidebar.js', './src/static/styles/chatpage.css', './src/static/styles/index.css',
-                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html', './src/html/video.html', './src/static/scripts/dm.js', './src/static/styles/dm.css', './src/static/styles/video.js', './src/static/scripts/video.js']
+                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html', './src/html/video.html', './src/static/scripts/dm.js', './src/static/styles/dm.css', './src/static/styles/video.js', './src/static/scripts/video.js', './src/html/settings.html', './src/static/scripts/settings.js']
     # Comment out Database
     # valid_files += database.list_img()
     # print(filename)
@@ -410,7 +413,7 @@ def user_upload(formdata):
     # body = b''
     # content_type = 'text/plain; charset=utf-8\r\nLocation: /'
     # return response.get_response(body, response_code, content_type)
-    return './src/static/profiles/'+img_path+'.jpg'
+    return './src/static/images/'+img_path+'.jpg'
     # """ else:
     #     response_code = '403 Forbidden'
     #     body = b'request was rejected'
