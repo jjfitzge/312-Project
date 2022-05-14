@@ -24,6 +24,7 @@ function addMessage(chatMessage) {
     const newDiv = document.createElement('div');
     newDiv.classList.add("chat-message");
     const nameColor = getUsernameColor(chatMessage['color']);
+    // const nameColor = getUsernameColor("green");
 
     newDiv.innerHTML = `<b class=${nameColor}>${chatMessage['username']}</b> ${chatMessage["comment"]}<br/>`
 
@@ -86,7 +87,7 @@ function addOnlineUser(user) {
 
     for (u of onlineUsers) {
         console.log("inner text", u.innerText);
-        if (u.innerText === user['username']) {
+        if (u.innerText === user['username'] || !u.innerText) {
             console.log(`Duplicate: ${u.username}`);
             return;
         }
@@ -108,8 +109,9 @@ function addOnlineUser(user) {
     userList.append(newDiv);
 }
 
-function getUsernameColor(user) {
-    const color = user['color'];
+function getUsernameColor(color) {
+    console.log("Username color is: ", color);
+    // const color = user['color'];
     switch (color) {
         case "black":
             return "username-black";
