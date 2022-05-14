@@ -48,7 +48,6 @@ def Bstring_Len_To_Num(b_string):
 
 
 
-class MyTcpHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
         global IMAGECOUNT
