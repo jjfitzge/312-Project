@@ -4,7 +4,6 @@ from pymongo import MongoClient
 from . import authentication, paths
 
 
-
 mongo_client = MongoClient("mongo")
 db = mongo_client["cse312"]
 user_collection = db["user"]
@@ -98,13 +97,14 @@ def list_msg():
 
 
 def list_img():
-    data = user_msg_collection.find({}, {"_id": 0, "comment": 1, "img": 1})
+    data = users.find({}, {"_id": 0, "username": 1, "salt": 1,
+                      "saltedhash": 1, "imagePath": 1})
     retval = []
     for entry in data:
         # print(entry)
-        file = entry['img']
-        file_path = './image/' + str(file)
-        retval.append(file_path)
+        file = entry['imagePath']
+
+        retval.append("./src"+file)
     return retval
 
 
@@ -112,7 +112,7 @@ def create_user(username, password, imagePath):
     salt_dict = authentication.get_saltedhash(password)
 
     data = {"username": username,
-            "salt": salt_dict["salt"], "saltedhash": salt_dict["saltedhash"], "imagePath":imagePath}
+            "salt": salt_dict["salt"], "saltedhash": salt_dict["saltedhash"], "imagePath": imagePath}
     users.insert_one(data)
 
 
@@ -163,6 +163,7 @@ def check_token(username, token):
     #         return dic['username']
     # return ""
 
+
 def getUser(token):
     # Match username and salted hash password
     # Get record for username and password
@@ -178,7 +179,7 @@ def getUser(token):
             return x
     return ""
 
-    
+
 def getUserbyUser(username):
     # Match username and salted hash password
     # Get record for username and password
@@ -189,5 +190,5 @@ def getUserbyUser(username):
     # doc = paths.storage_tokens
     print("storageTokens in database", doc)
     for x in doc:
-            return x
+        return x
     return ""

@@ -124,7 +124,8 @@ def route_path(data, handler):
                     content_type = 'text/plain; charset=utf-8\r\nLocation: /'
                     # storage.append({"username": user, "password": password})
                     # print("storage in register", storage)
-                    database.create_user(userInfo['user'], userInfo["pass"], imagePath)
+                    database.create_user(
+                        userInfo['user'], userInfo["pass"], imagePath)
                     return response.get_response(body, response_code, content_type)
             response_code = '301 Moved Permanently'
             body = b''
@@ -210,7 +211,7 @@ def get_body(filename):
     valid_files = ['./src/static/images/favicon.ico', './src/static/images/hero.jpg', './src/static/images/walrusicon.png', './src/static/images/walruslogo.png', './src/static/scripts/chat.js', './src/static/scripts/sidebar.js', './src/static/styles/chatpage.css', './src/static/styles/index.css',
                    './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html', './src/html/video.html', './src/static/scripts/dm.js', './src/static/styles/dm.css', './src/static/styles/video.js', './src/static/scripts/video.js', './src/html/settings.html']
     # Comment out Database
-    # valid_files += database.list_img()
+    valid_files += database.list_img()
     # print(filename)
     # print(valid_files)
     if filename in valid_files:
@@ -411,7 +412,7 @@ def user_upload(formdata):
     # body = b''
     # content_type = 'text/plain; charset=utf-8\r\nLocation: /'
     # return response.get_response(body, response_code, content_type)
-    return './src/static/images/'+img_path+'.jpg'
+    return '/static/images/'+img_path+'.jpg'
     # """ else:
     #     response_code = '403 Forbidden'
     #     body = b'request was rejected'
