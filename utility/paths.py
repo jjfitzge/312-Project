@@ -50,8 +50,8 @@ def route_path(data, handler):
                 # if auth-token in database send the chatpage
                 userInfo = database.getUser(auth_token)
                 if userInfo != "":
-                    return get_html_file("./html/chatpage.html", headers)    ###############################################
-            return get_html_file("./html/index.html", headers)               ##############################################
+                    return get_html_file("/html/chatpage.html", headers)    ###############################################
+            return get_html_file("/html/index.html", headers)               ##############################################
         if type == "POST":
             print("body---Body-------", body)
             userInfo = getUserInfo(body)
@@ -73,15 +73,15 @@ def route_path(data, handler):
                 storage_tokens.append({"authToken": hashedToken})
                 contentType = "text/html; charset=utf-8\r\nX-Content-Type-Options:nosniff" + \
                     cookie + user_cookie
-                body = get_body("./src/html/chatpage.html")  ###################################################
+                body = get_body("/html/chatpage.html")  ###################################################
                 return response.get_response(body, "200 OK", contentType)
                 # return get_html_file("/src/html/chatpage.html", cookie)
                 # send the http request of the chatpage, and set auth-token cookie
             else:
-                return get_html_file("./html/index.html", headers)        ###########################################
+                return get_html_file("/html/index.html", headers)        ###########################################
     elif path == "/static/styles/index.css":                                   ####################################
         return get_css(path)
-    elif path == "./html/register.html":
+    elif path == "/html/register.html":
         return get_html_file(path, headers)
     elif path == "/static/styles/chatpage.css":
         return get_css(path)
@@ -91,15 +91,15 @@ def route_path(data, handler):
         return get_css(path)
     elif path == "/static/scripts/sidebar.css":
         return get_js(path)
-    elif path == "./html/chatpage.html":
+    elif path == "/html/chatpage.html":
         return get_html_file(path, headers)
     elif path == "/register":
         if type == "GET":
-            return get_html_file("./html/register.html", headers)
+            return get_html_file("/html/register.html", headers)
         elif type == "POST":
             return register(body)
     elif path == "/chat":
-        return get_html_file("./html/chatpage.html", headers)
+        return get_html_file("/html/chatpage.html", headers)
     elif path == "/static/scripts/chat.js":
         return get_js(path)
     elif path == "/style.css":
@@ -153,8 +153,8 @@ def route_path(data, handler):
 
 
 def get_body(filename):
-    valid_files = ['./src/static/images/favicon.ico', './src/static/images/hero.jpg', './src/static/images/walrusicon.png', './src/static/images/walruslogo.png', './src/static/scripts/chat.js', './src/static/scripts/sidebar.js', './src/static/styles/chatpage.css', './src/static/styles/index.css',
-                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html']
+    valid_files = ['./static/images/favicon.ico', './static/images/hero.jpg', './static/images/walrusicon.png', './static/images/walruslogo.png', './static/scripts/chat.js', './static/scripts/sidebar.js', './static/styles/chatpage.css', './static/styles/index.css',
+                   './static/styles/sidebar.css', './static/svgs/arrow-right-from-bracket.svg', './static/svgs/gear.svg', './static/svgs/inbox.svg', './static/svgs/message.svg', './static/svgs/paper-plane.svg', './static/svgs/square-caret.svg', './static/svgs/video.svg', './html/chatpage.html', './html/index.html', './html/loginpage.html', './html/mainpage.html', './html/register.html']
     # Comment out Database
     # valid_files += database.list_img()
     # print(filename)
@@ -264,13 +264,13 @@ def get_html(headers):
 
 
 def get_css(path):
-    body: bytes = get_body(path)
+    body: bytes = get_body('.'+path)
     content_type = 'text/css; charset=utf-8\r\nX-Content-Type-Options: nosniff'
     return response.get_response(body, content_type=content_type)
 
 
 def get_js(path):
-    body: bytes = get_body(path)
+    body: bytes = get_body('.'+path)
     content_type = 'text/javascript; charset=utf-8\r\nX-Content-Type-Options: nosniff'
     return response.get_response(body, content_type=content_type)
 
