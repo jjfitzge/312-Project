@@ -108,11 +108,11 @@ def list_img():
     return retval
 
 
-def create_user(username, password, imagePath):
+def create_user(username, password, imagePath, color):
     salt_dict = authentication.get_saltedhash(password)
 
     data = {"username": username,
-            "salt": salt_dict["salt"], "saltedhash": salt_dict["saltedhash"], "imagePath": imagePath}
+            "salt": salt_dict["salt"], "saltedhash": salt_dict["saltedhash"], "imagePath": imagePath, "color": color}
     users.insert_one(data)
 
 
@@ -192,3 +192,10 @@ def getUserbyUser(username):
     for x in doc:
         return x
     return ""
+
+
+def update_user(username, color):
+    data = getUserbyUser(username)
+    data['color'] = color
+    query = {"username": username}
+    users.update(query, data)

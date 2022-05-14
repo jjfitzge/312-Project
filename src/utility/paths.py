@@ -127,7 +127,7 @@ def route_path(data, handler):
                     # storage.append({"username": user, "password": password})
                     # print("storage in register", storage)
                     database.create_user(
-                        userInfo['user'], userInfo["pass"], imagePath)
+                        userInfo['user'], userInfo["pass"], imagePath, 'black')
                     return response.get_response(body, response_code, content_type)
             response_code = '301 Moved Permanently'
             body = b''
@@ -139,6 +139,8 @@ def route_path(data, handler):
         return get_html_file("/src/html/chatpage.html", headers)
     elif path == "/static/scripts/chat.js":
         return get_js(path)
+    elif path == "/set-color":
+        return get_color()
     elif path == "/style.css":
         return get_css()
     elif path == "/functions.js":
@@ -684,3 +686,20 @@ def get_toUser(request_header):
     if username.find(';') != -1:
         username = username[:username.find(';')]
     return response.get_response(json_util.dumps(toUserDict[username]).encode(), '200 OK')
+
+
+def set_color(formdata, request_header):
+    cookies = request_header.get('Cookie', '')
+    username = cookies[cookies.find("Username=")+len("Username="):]
+    if username.find(';') != -1:
+        username = username[:username.find(';')]
+    for data in formdata.values():
+        # print(data)
+        if len(data) != 0:
+            data_heading = data["heading"]
+            # print(data_heading)
+            if len(data_heading) == 0:
+                continue
+            if data_heading['name'] == "color":
+                color = data["body"]
+                database.update_user(username, color)

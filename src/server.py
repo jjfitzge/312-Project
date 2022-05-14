@@ -44,13 +44,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
             userInfo = database.getUserbyUser(
                 paths.websocket_connections[self])
             send_frame = websocket.generate_frame(
-                websocket.gen_user_payload('addOnlineUser', paths.websocket_connections[self], userInfo["imagePath"], 'red'), paths.websocket_connections[self])
+                websocket.gen_user_payload('addOnlineUser', paths.websocket_connections[self], userInfo["imagePath"], userInfo["color"]), paths.websocket_connections[self])
             print("Sending the frame", send_frame)
             print(userInfo["imagePath"])
             for user in paths.websocket_connections.keys():
                 user.request.sendall(send_frame)
             paths.online_users[self] = {
-                "username": paths.websocket_connections[self], "img_src": userInfo["imagePath"], "color": "red"}
+                "username": paths.websocket_connections[self], "img_src": userInfo["imagePath"], "color": userInfo["color"]}
             while True:
                 websocket.ws_payload_length[self] = default_length
                 websocket.ws_payload_cur_length[self] = 0
@@ -160,11 +160,12 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     self.request.sendall(send_frame)
                     # Send the notications frame
                     comment = json.loads(frame_dict["data"])['comment']
-
+                    userInfo = database.getUserbyUser(
+                        paths.websocket_connections[self])
                     print("This is the frame being sent for notifications", websocket.gen_user_payload(
-                        'recievedNotif', paths.websocket_connections[self], color='red', msg=comment))
+                        'recievedNotif', paths.websocket_connections[self], color=userInfo['color'], msg=comment))
                     send_frame = websocket.generate_frame(
-                        websocket.gen_user_payload('receivedNotif', paths.websocket_connections[self], color='red', msg=comment), paths.websocket_connections[self])
+                        websocket.gen_user_payload('receivedNotif', paths.websocket_connections[self], color=userInfo['color'], msg=comment), paths.websocket_connections[self])
                     print("Sending a notification message to the users",
                           paths.websocket_connections)
                     print("To the User", toUser)
