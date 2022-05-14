@@ -101,9 +101,25 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     # Send just the payload to the other client
                     send_frame = websocket.generate_webrtc_frame(
                         frame_dict["data"])
-                    for user in paths.websocket_connections.keys():
+                    toUser = json.loads(frame_dict["data"]).get('toUser')
+                    """ for user in paths.websocket_connections.keys():
                         if user != self:
-                            user.request.sendall(send_frame)
+                            user.request.sendall(send_frame) """
+                    print("This is a webRTC connection")
+                    print(toUser)
+                    if toUser:
+                        print(paths.webRtc)
+                        paths.webRtc[self] = toUser
+                        # get the other users handle
+                        otherUser = paths.user_connections[toUser]
+                        paths.webRtc[otherUser] = paths.websocket_connections[self]
+                        paths.user_connections[toUser].request.sendall(
+                            send_frame)
+                    else:
+                        print(paths.webRtc)
+                        toUser = paths.webRtc[self]
+                        paths.user_connections[toUser].request.sendall(
+                            send_frame)
                 elif json.loads(frame_dict["data"])['messageType'] == 'initDM':
                     print("This is a direct message")
                     # Get the username of who the message is for
@@ -166,6 +182,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     sys.stdout.flush()
                     msg = json.loads(frame_dict["data"])
                     msg = msg['comment']
+                    """ if not msg.get("username"):
+                        break """
                     sys.stdout.flush()
                     sys.stdout.flush()
                     #database.insert_chat(username, msg)
@@ -177,7 +195,8 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     print("Open Dm's", paths.open_dms)
                     for user in paths.websocket_connections.keys():
                         sys.stdout.flush()
-                        user.request.sendall(send_frame)
+                        if paths.websocket_connections[user] != '':
+                            user.request.sendall(send_frame)
 
         else:
             sys.stdout.flush()

@@ -82,12 +82,14 @@ socket.onmessage = function (ws_message) {
         Creates a new div and adds a user to the userlist using the the data in the passed in user object
 */
 function addOnlineUser(user) {
+    if (!user || user['username'] === "undefined" || !user['username']) return;
+
     const userList = document.getElementsByClassName('user-list-view')[0];
     const onlineUsers = userList.querySelectorAll('.user-list-item');
 
     for (u of onlineUsers) {
         console.log("inner text", u.innerText);
-        if (u.innerText === user['username'] || !u.innerText) {
+        if (u.innerText === user['username']) {
             console.log(`Duplicate: ${u.username}`);
             return;
         }
@@ -212,7 +214,7 @@ function showNotification(fromUser) {
     const newNotif = document.createElement('div');
     newNotif.classList.add("notification");
     newNotif.setAttribute("onclick", `goToDM("${username}");`)
-    
+
 
     newNotif.innerHTML = `${username} has sent you a message!<br /><b>${username}</b>: ${message}`;
     notifications.append(newNotif);

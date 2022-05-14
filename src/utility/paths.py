@@ -38,6 +38,8 @@ online_users_id = {}
 open_dms = {}
 toUserDict = {}
 
+webRtc = {}
+
 
 def route_path(data, handler):
     request_dict = request.new_parse(data)
@@ -587,7 +589,7 @@ def websocket_upgrade(headers, handler, request_header):
     print("Got the Username:", username)
     #username = "User" + str(random.randint(0, 1000))
     # Check if username is already in the dS and remove it
-    if user_connections.get(username):
+    if user_connections.get(username) and username != '':
         print("found duplicates")
         user_connections.pop(username)
         key = {
