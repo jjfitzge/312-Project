@@ -402,7 +402,7 @@ def user_upload(formdata):
                 comment = data["body"]
             elif data_heading["name"] == "upload":
                 print("MADE IT IN USER UPLOAD")
-                with open('./src/static/profiles/'+img_path+'.jpg', 'wb') as f:
+                with open('./src/static/images/'+img_path+'.jpg', 'wb') as f:
                     f.write(data["body"])
     #database.create_msg(comment, img_path)
     # response_code = '301 Moved Permanently'
