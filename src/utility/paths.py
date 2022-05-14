@@ -101,7 +101,7 @@ def route_path(data, handler):
             return get_html_file("/src/html/register.html", headers)
         elif type == "POST":
             d = request_dict["multi-part"].values()
-            # print("HEADINGGGGGGGGG", d) 
+            # print("HEADINGGGGGGGGG", d)
             user = ""
             password = ""
             password2 = ""
@@ -114,8 +114,9 @@ def route_path(data, handler):
                     password = dic['body']
                 if dic['heading']['name'] == "pass2":
                     password2 = dic['body']
-                userInfo = {"user": user, "pass": password, "pass2": password2, "imagePath" : imagePath}
-                print( "UserInfo__________",userInfo)
+                userInfo = {"user": user, "pass": password,
+                            "pass2": password2, "imagePath": imagePath}
+                print("UserInfo__________", userInfo)
                 if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
                     if userInfo["pass"] == userInfo["pass2"]:
                         response_code = '301 Moved Permanently'
@@ -172,9 +173,9 @@ def route_path(data, handler):
         return get_css(path)
     elif path == "/video":
         return get_html_file("/src/html/video.html", headers)
-    elif path =="/static/styles/video.css":
+    elif path == "/static/styles/video.css":
         return get_css(path)
-    elif path =="/static/scripts/video.js":
+    elif path == "/static/scripts/video.js":
         return get_js(path)
     elif path == "/users":
         if type == "GET":
@@ -206,7 +207,7 @@ def route_path(data, handler):
 
 def get_body(filename):
     valid_files = ['./src/static/images/favicon.ico', './src/static/images/hero.jpg', './src/static/images/walrusicon.png', './src/static/images/walruslogo.png', './src/static/scripts/chat.js', './src/static/scripts/sidebar.js', './src/static/styles/chatpage.css', './src/static/styles/index.css',
-                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html','./src/html/video.html', './src/static/scripts/dm.js', './src/static/styles/dm.css']
+                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html', './src/html/video.html', './src/static/scripts/dm.js', './src/static/styles/dm.css', './src/static/styles/video.js', './src/static/scripts/video.js']
     # Comment out Database
     # valid_files += database.list_img()
     # print(filename)
@@ -619,7 +620,7 @@ def register(information):
     print(information)
     if len(information.values()) > 1:
         for dic in information.values():
-            print("dcitionary",dic)
+            print("dcitionary", dic)
             # if dic['heading']['name'] == "user":
             #     user = dic['body']
             # if dic['heading']['name'] == "pass":
@@ -627,7 +628,7 @@ def register(information):
             # if dic['heading']['name'] == "pass2":
             #     password2 = dic['body']
         userInfo = {"user": user, "pass": password, "pass2": password2}
-        print( "UserInfo__________",userInfo)
+        print("UserInfo__________", userInfo)
         if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
             if userInfo["pass"] == userInfo["pass2"]:
                 response_code = '301 Moved Permanently'
