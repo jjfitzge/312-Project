@@ -140,7 +140,7 @@ def route_path(data, handler):
     elif path == "/static/scripts/chat.js":
         return get_js(path)
     elif path == "/set-color":
-        return get_color()
+        return get_color(request_dict["multi-part"], headers)
     elif path == "/style.css":
         return get_css()
     elif path == "/functions.js":
@@ -688,7 +688,7 @@ def get_toUser(request_header):
     return response.get_response(json_util.dumps(toUserDict[username]).encode(), '200 OK')
 
 
-def set_color(formdata, request_header):
+def get_color(formdata, request_header):
     cookies = request_header.get('Cookie', '')
     username = cookies[cookies.find("Username=")+len("Username="):]
     if username.find(';') != -1:
