@@ -35,7 +35,7 @@
       <div class="login-container">
         <div class="login-box">
           <div class="login-header">Register User</div>
-          <form method="POST">
+          <form method="POST" enctype="multipart/form-data">
             <div class="login-input">
               <label for="username"> Username: </label>
               <input type="text" id="username" name="user" />
@@ -46,16 +46,21 @@
               <input type="text" id="password" name="pass" />
               <label for="password2"> Re-type Password:</label>
               <input type="text" id="password2" name="pass2" /><br>
+            </div>
+            <div class="login-input">
+              <input value="{{xsrftoken}}" name="xsrf_token" hidden>
+              <label for="form-file">Profile Upload:(accepting jpgs) </label>
+              <input id="form-file" type="file" name="upload">
               <input type="submit" value="Submit"/><br>
             </div>
           </form>
           <br>
-          <form action="/image-upload" id="image-form" method="post" enctype="multipart/form-data">
+          <!-- <form action="/image-upload" id="image-form" method="post" enctype="multipart/form-data">
             <input value="{{xsrftoken}}" name="xsrf_token" hidden>
             <label for="form-file">Profile Upload: </label>
             <input id="form-file" type="file" name="upload">
             <input type="submit" value="Post">
-          </form>
+          </form> -->
         </div>
       </div> <!--end of register box -->
     </div>   <!-- end of container -->

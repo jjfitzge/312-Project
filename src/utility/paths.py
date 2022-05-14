@@ -46,21 +46,17 @@ def route_path(data, handler):
     if path == "/":
         # return get_html(headers)
         if type == "GET":
-            print('---------------requestDict----------')
-            print(request_dict)
-            print('++++++++++++++++++++++++++++++++++++')
-            cookie = headers.get("Cookie", "")
-            if cookie != "":
-                print(cookie)
-                auth_token = cookie.split("=")[1]
-                print("Auth-Token", auth_token)
-                # if auth-token in database send the chatpage
-                userInfo = database.getUser(auth_token)
-                if userInfo != "":
-                    return get_html_file("/src/html/chatpage.html", headers)
+            cooks = headers.get("Cookie", "").split(";")
+            for cook in cooks:
+                if cook.startswith("Auth-Token="):
+                    auth_token = cook.split("Auth-Token=")[1]
+                    print("Auth-Token", auth_token)
+                    # if auth-token in database send the chatpage
+                    userInfo = database.getUser(auth_token)
+                    if userInfo != "":
+                        return get_html_file("/src/html/chatpage.html", headers)
             return get_html_file("/src/html/index.html", headers)
         if type == "POST":
-            print("body---Body-------", body)
             userInfo = getUserInfo(body)
             print(userInfo)
             username = userInfo[0]
@@ -104,7 +100,38 @@ def route_path(data, handler):
         if type == "GET":
             return get_html_file("/src/html/register.html", headers)
         elif type == "POST":
-            return register(body)
+            d = request_dict["multi-part"].values()
+            # print("HEADINGGGGGGGGG", d) 
+            user = ""
+            password = ""
+            password2 = ""
+            imagePath = user_upload(request_dict["multi-part"])
+            print("UserrrrrPATHHHH-----", imagePath)
+            for dic in d:
+                if dic['heading']['name'] == "user":
+                    user = dic['body']
+                if dic['heading']['name'] == "pass":
+                    password = dic['body']
+                if dic['heading']['name'] == "pass2":
+                    password2 = dic['body']
+                userInfo = {"user": user, "pass": password, "pass2": password2, "imagePath" : imagePath}
+                print( "UserInfo__________",userInfo)
+                if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
+                    if userInfo["pass"] == userInfo["pass2"]:
+                        response_code = '301 Moved Permanently'
+                    body = b''
+                    content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+                    storage.append({"username": user, "password": password})
+                    print("storage in register", storage)
+                    # database.create_user(userInfo['user'], userInfo["pass"])
+                    return response.get_response(body, response_code, content_type)
+            response_code = '301 Moved Permanently'
+            body = b''
+            content_type = 'text/plain; charset=utf-8\r\nLocation: /register'
+            return response.get_response(body, response_code, content_type)
+
+            pass
+            # return register(d)
     elif path == "/chat":
         return get_html_file("/src/html/chatpage.html", headers)
     elif path == "/static/scripts/chat.js":
@@ -363,6 +390,9 @@ def user_upload(formdata):
         str(database.get_id(database.img_count_collection)+1)+'.jpg' """
     img_path = 'picture' + str(random.randint(0, 1000))
     valid_token = False
+    print("-------------")
+    print(formdata)
+    print("-------------------------")
     for data in formdata.values():
         if len(data) != 0:
             data_heading = data["heading"]
@@ -371,18 +401,19 @@ def user_upload(formdata):
             if data_heading["name"] == "comment":
                 comment = data["body"]
             elif data_heading["name"] == "upload":
+                print("MADE IT IN USER UPLOAD")
                 with open('./src/static/images/'+img_path+'.jpg', 'wb') as f:
                     f.write(data["body"])
-
     #database.create_msg(comment, img_path)
-    response_code = '301 Moved Permanently'
-    body = b''
-    content_type = 'text/plain; charset=utf-8\r\nLocation: /'
-    return response.get_response(body, response_code, content_type)
-    """ else:
-        response_code = '403 Forbidden'
-        body = b'request was rejected'
-        return response.get_response(body, response_code) """
+    # response_code = '301 Moved Permanently'
+    # body = b''
+    # content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+    # return response.get_response(body, response_code, content_type)
+    return './src/static/profiles/'+img_path+'.jpg'
+    # """ else:
+    #     response_code = '403 Forbidden'
+    #     body = b'request was rejected'
+    #     return response.get_response(body, response_code) """
 
 
 def signup(formdata):
@@ -582,23 +613,30 @@ def retrieve_messages():
 
 
 def register(information):
-    information = information.decode()
-    idxUser = information.find("user=")
-    idxPass = information.find("pass=")
-    idxPass2 = information.find("pass2=")
-    user = information[idxUser + len("user="):idxPass].replace("&", "")
-    password = information[idxPass + len("pass="): idxPass2].replace("&", "")
-    password2 = information[idxPass2 + len("pass2="):].replace("&", "")
-    userInfo = {"user": user, "pass": password, "pass2": password2}
-    if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
-        if userInfo["pass"] == userInfo["pass2"]:
-            response_code = '301 Moved Permanently'
-        body = b''
-        content_type = 'text/plain; charset=utf-8\r\nLocation: /'
-        storage.append({"username": user, "password": password})
-        print("storage in register", storage)
-        # database.create_user(userInfo['user'], userInfo["pass"])
-        return response.get_response(body, response_code, content_type)
+    user = ""
+    password = ""
+    password2 = ""
+    print(information)
+    if len(information.values()) > 1:
+        for dic in information.values():
+            print("dcitionary",dic)
+            # if dic['heading']['name'] == "user":
+            #     user = dic['body']
+            # if dic['heading']['name'] == "pass":
+            #     password = dic['body']
+            # if dic['heading']['name'] == "pass2":
+            #     password2 = dic['body']
+        userInfo = {"user": user, "pass": password, "pass2": password2}
+        print( "UserInfo__________",userInfo)
+        if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
+            if userInfo["pass"] == userInfo["pass2"]:
+                response_code = '301 Moved Permanently'
+            body = b''
+            content_type = 'text/plain; charset=utf-8\r\nLocation: /'
+            storage.append({"username": user, "password": password})
+            print("storage in register", storage)
+            # database.create_user(userInfo['user'], userInfo["pass"])
+            return response.get_response(body, response_code, content_type)
     response_code = '301 Moved Permanently'
     body = b''
     content_type = 'text/plain; charset=utf-8\r\nLocation: /register'
