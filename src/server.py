@@ -139,7 +139,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     print("Online users", paths.online_users)
                     print("Open Dm's", paths.open_dms)
                     paths.user_connections[toUser].request.sendall(send_frame)
-                    paths.user_connections[self].request.sendall(send_frame)
+                    self.request.sendall(send_frame)
                     # Send the notications frame
                     print("This is the frame being sent for notifications", websocket.gen_user_payload(
                         'recievedNotif', paths.websocket_connections[self], color='red'))

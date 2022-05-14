@@ -13,6 +13,9 @@ socket.onmessage = function (ws_message) {
         case 'directMessage':
             addWebsocketMessage(message);
             break;
+        case 'receivedNotif':
+            showNotification(message);
+            break;
         default:
             console.log(`received an invalid WS messageType: ${messageType}`);
     }
@@ -55,18 +58,12 @@ function initRecipient() {
     request.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             console.log(`response: ${this.response}`);
-            // const data = JSON.parse(this.response);
-            // setRecipient(data['toUser']);
             const data = this.response;
             console.log(`Datatype: ${(typeof data)}`)
             const toUser = data.slice(1, data.length-1); // Remove quotations from the data
             recipient = toUser;
 
-
             console.log("set user to ", toUser);
-
-            // const toUser = data.toUser;
-            // recipient = toUser;
         }
     }
     request.open("GET", "/dm-to");
@@ -87,12 +84,12 @@ function sendDM() {
 function setRecipient(username) {
     console.log(`Set recipient to ${username}`);
     recipient = username;
-    // refreshMessagePane(username);
+    refreshMessagePane(username);
 }
 
 function refreshMessagePane(newRecipient) {
-    deleteMessages();
-    showMessages(messageData, newRecipient)
+    // deleteMessages();
+    // showMessages(messageData, newRecipient)
 }
 
 function deleteMessages() {
@@ -118,7 +115,8 @@ function addWebsocketMessage(data) {
     const username = data['username'];
     const toUser = data['toUser'];
     console.log(`Sent from ${username} to ${toUser}`)
-    if (username != recipient && username != toUser) return;
+    console.log(`current recipient: ${recipient}`);
+    // if (username !== recipient && username !== toUser) return;
 
     const message = data['comment'];
     const color = data['color'];
@@ -172,4 +170,36 @@ function createMessage(msg) {
     newdiv.classList.add('message-container');
     // const username = 
 
+}
+
+function showNotification(fromUser) {
+    if (!fromUser) return;
+
+    const notifications = document.querySelector(".notifications-container");
+    const username = fromUser.username;
+
+    const newNotif = document.createElement('div');
+    newNotif.classList.add("notification");
+    newNotif.setAttribute("onclick", `goToDM("${username}");`)
+    
+
+    newNotif.innerHTML = `${username} has sent you a message!`;
+    notifications.append(newNotif);
+}
+
+function goToDM(username) {
+    console.log(`went to dm ${username}`)
+    if (username) {
+        socket.send(JSON.stringify({ 'messageType': 'initDM', 'toUser': username }));
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log("window location:", window.location);
+                window.location = "dm";
+            }
+        };
+
+        request.open("GET", "/redirectdm");
+        request.send();
+    }
 }

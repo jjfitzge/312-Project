@@ -21,6 +21,8 @@ body { /* Do a grid container if this doesn't work */
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+
+    display:none;
 }
 
 
@@ -29,6 +31,7 @@ body { /* Do a grid container if this doesn't work */
     min-width: 70%;
     min-height: 100%;
     background-color: lavender;
+    position: relative;
 
     display: flex;
     flex-direction: column;
@@ -76,4 +79,33 @@ body { /* Do a grid container if this doesn't work */
     flex-direction: column;
     gap: .5rem;
     overflow-y: scroll;
+}
+
+.notifications-container {
+    max-height: 100vh;
+    overflow-y: scroll;
+
+    position: absolute;
+    left: 1%;
+    top: 1%;
+    
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.notification {
+/*     position: absolute;
+    left: 1%;
+    top: 1%; */
+    text-align: center;
+    padding: 1rem;
+    background-color:#b9fbc0;
+    cursor: pointer;
+    border-radius: .5rem;
+    box-shadow: 0rem .1rem .5rem green;
+}
+
+.notification-hidden {
+    display:none;
 }
