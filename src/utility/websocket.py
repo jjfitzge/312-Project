@@ -355,12 +355,15 @@ def generate_webrtc_frame(payload, opcode=129):
 # Function to generate the user information sent over WS
 
 
-def gen_user_payload(messageType: str, username: str, src=None, color=None):
+def gen_user_payload(messageType: str, username: str, src=None, color=None, msg=None):
     # Get user info from database (img_src, color)
     if messageType == 'addOnlineUser':
         return json.dumps({'messageType': messageType, 'username': username, "img_src": src, 'color': color})
     if messageType == 'recievedNotif':
-        return json.dumps({'messageType': messageType, 'username': username, 'color': color})
+        msg = msg.replace('&', '&amp;')
+        msg = msg.replace('<', '&lt;')
+        msg = msg.replace('>', '&gt;')
+        return json.dumps({'messageType': messageType, 'username': username, 'color': color, 'comment': msg})
     else:
         return json.dumps({'messageType': messageType, 'username': username})
 

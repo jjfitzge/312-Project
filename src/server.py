@@ -141,10 +141,12 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     paths.user_connections[toUser].request.sendall(send_frame)
                     self.request.sendall(send_frame)
                     # Send the notications frame
+                    comment = json.loads(frame_dict["data"])['comment']
+
                     print("This is the frame being sent for notifications", websocket.gen_user_payload(
-                        'recievedNotif', paths.websocket_connections[self], color='red'))
+                        'recievedNotif', paths.websocket_connections[self], color='red', msg=comment))
                     send_frame = websocket.generate_frame(
-                        websocket.gen_user_payload('receivedNotif', paths.websocket_connections[self], color='red'), paths.websocket_connections[self])
+                        websocket.gen_user_payload('receivedNotif', paths.websocket_connections[self], color='red', msg=comment), paths.websocket_connections[self])
                     print("Sending a notification message to the users",
                           paths.websocket_connections)
                     print("To the User", toUser)

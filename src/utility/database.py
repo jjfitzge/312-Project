@@ -108,11 +108,11 @@ def list_img():
     return retval
 
 
-def create_user(username, password):
+def create_user(username, password, imagePath):
     salt_dict = authentication.get_saltedhash(password)
 
     data = {"username": username,
-            "salt": salt_dict["salt"], "saltedhash": salt_dict["saltedhash"]}
+            "salt": salt_dict["salt"], "saltedhash": salt_dict["saltedhash"], "imagePath":imagePath}
     users.insert_one(data)
 
 
@@ -145,7 +145,6 @@ def check_token(username, token):
     # Get record for username and password
     query = {"username": username}
     print(query)
-
     doc = users_tokens.find(query)
 
     for x in doc:
@@ -154,8 +153,8 @@ def check_token(username, token):
         checksalt = authentication.check_salt(token, salt)
         if x["authToken"] == checksalt:
             print("User is Authenticated")
-            return True
-    return False
+            return x
+    return ""
 
     # def getUser(authToken):
     # listDic = list(db.collection.find({}, {"_id": 0}))
