@@ -57,10 +57,18 @@ function startVideo() {
 
 
 function connectWebRTC() {
+    const input = document.getElementById("send-to-user");
+    const toUser = input.value;
+    input.value = "";
+    input.focus();
+    // console.log("toUser", toUser);
     // create and send an offer
     webRTCConnection.createOffer().then(webRTCOffer => {
-        socket.send(JSON.stringify({'messageType': 'webRTC-offer', 'offer': webRTCOffer}));
-        webRTCConnection.setLocalDescription(webRTCOffer);
+        if(toUser != "") {
+            // console.log("Sending: ", (JSON.stringify({'messageType': 'webRTC-offer', 'offer': webRTCOffer, 'toUser':toUser})))
+            socket.send(JSON.stringify({'messageType': 'webRTC-offer', 'offer': webRTCOffer, 'toUser':toUser}));
+            webRTCConnection.setLocalDescription(webRTCOffer);
+        }
     });
 
 }

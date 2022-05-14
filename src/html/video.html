@@ -68,7 +68,7 @@
         </a>
     </div>
 </nav>
-<br />
+<!-- <br />
     <button onclick="startVideo()">Start My Video</button>
     <br />
     <button onclick="connectWebRTC()">Start Video Chat</button>
@@ -76,12 +76,18 @@
 
     <video id="myVideo" autoplay muted></video>
     <br />
-    <video id="otherVideo" autoplay></video>
+    <video id="otherVideo" autoplay></video> -->
 <div class="video-container">
     <div class="video myVideo">
-
+        <video id="myVideo" autoplay muted></video>
+        <button onclick="startVideo()">Start My Video</button>
+    <br />
     </div>
     <div class="video otherVideo">
+        <video id="otherVideo" autoplay></video>
+        <input id="send-to-user" type="text" name="send-to-user">
+        <button onclick="connectWebRTC()">Start Video Chat</button>
+        <br />
 
     </div>
 </div>
