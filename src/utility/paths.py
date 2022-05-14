@@ -1,7 +1,8 @@
-
+from email import header
+from importlib.resources import path
 import json
 
-
+from flask import redirect
 from . import response, database, request, template, authentication, cookies, websocket
 from bson import json_util
 import random
@@ -45,25 +46,17 @@ def route_path(data, handler):
     if path == "/":
         # return get_html(headers)
         if type == "GET":
-            print('---------------requestDict----------')
-            print(request_dict)
-            print('++++++++++++++++++++++++++++++++++++')
             cooks = headers.get("Cookie", "").split(";")
             for cook in cooks:
-                print("----------------")
-                print(cook)
                 if cook.startswith("Auth-Token="):
-                    print("COOKIEEEEEEEE", cook)
                     auth_token = cook.split("Auth-Token=")[1]
                     print("Auth-Token", auth_token)
                     # if auth-token in database send the chatpage
                     userInfo = database.getUser(auth_token)
-                    print("USERINFOOOOOOO", userInfo)
                     if userInfo != "":
                         return get_html_file("/src/html/chatpage.html", headers)
             return get_html_file("/src/html/index.html", headers)
         if type == "POST":
-            print("body---Body-------", body)
             userInfo = getUserInfo(body)
             print(userInfo)
             username = userInfo[0]
@@ -108,11 +101,12 @@ def route_path(data, handler):
             return get_html_file("/src/html/register.html", headers)
         elif type == "POST":
             d = request_dict["multi-part"].values()
-            # print("HEADINGGGGGGGGG", d)
+            # print("HEADINGGGGGGGGG", d) 
             user = ""
             password = ""
             password2 = ""
-            imagePath = ""
+            imagePath = user_upload(request_dict["multi-part"])
+            print("UserrrrrPATHHHH-----", imagePath)
             for dic in d:
                 if dic['heading']['name'] == "user":
                     user = dic['body']
@@ -120,11 +114,8 @@ def route_path(data, handler):
                     password = dic['body']
                 if dic['heading']['name'] == "pass2":
                     password2 = dic['body']
-                if dic['heading']['name'] == "upload":
-                    imagePath = user_upload(request_dict["multi-part"])
-                userInfo = {"user": user, "pass": password,
-                            "pass2": password2, "imagePath": imagePath}
-                print("UserInfo__________", userInfo)
+                userInfo = {"user": user, "pass": password, "pass2": password2, "imagePath" : imagePath}
+                print( "UserInfo__________",userInfo)
                 if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
                     if userInfo["pass"] == userInfo["pass2"]:
                         response_code = '301 Moved Permanently'
@@ -181,9 +172,9 @@ def route_path(data, handler):
         return get_css(path)
     elif path == "/video":
         return get_html_file("/src/html/video.html", headers)
-    elif path == "/static/styles/video.css":
+    elif path =="/static/styles/video.css":
         return get_css(path)
-    elif path == "/static/scripts/video.js":
+    elif path =="/static/scripts/video.js":
         return get_js(path)
     elif path == "/users":
         if type == "GET":
@@ -215,7 +206,7 @@ def route_path(data, handler):
 
 def get_body(filename):
     valid_files = ['./src/static/images/favicon.ico', './src/static/images/hero.jpg', './src/static/images/walrusicon.png', './src/static/images/walruslogo.png', './src/static/scripts/chat.js', './src/static/scripts/sidebar.js', './src/static/styles/chatpage.css', './src/static/styles/index.css',
-                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html', './src/html/video.html', './src/static/scripts/dm.js', './src/static/styles/dm.css']
+                   './src/static/styles/sidebar.css', './src/static/svgs/arrow-right-from-bracket.svg', '/src./static/svgs/gear.svg', './src/static/svgs/inbox.svg', './src/static/svgs/message.svg', './src/static/svgs/paper-plane.svg', './src/static/svgs/square-caret.svg', './src/static/svgs/video.svg', './src/html/chatpage.html', './src/html/index.html', './src/html/loginpage.html', './src/html/mainpage.html', './src/html/register.html', './src/html/dm.html','./src/html/video.html', './src/static/scripts/dm.js', './src/static/styles/dm.css']
     # Comment out Database
     # valid_files += database.list_img()
     # print(filename)
@@ -399,6 +390,9 @@ def user_upload(formdata):
         str(database.get_id(database.img_count_collection)+1)+'.jpg' """
     img_path = 'picture' + str(random.randint(0, 1000))
     valid_token = False
+    print("-------------")
+    print(formdata)
+    print("-------------------------")
     for data in formdata.values():
         if len(data) != 0:
             data_heading = data["heading"]
@@ -407,6 +401,7 @@ def user_upload(formdata):
             if data_heading["name"] == "comment":
                 comment = data["body"]
             elif data_heading["name"] == "upload":
+                print("MADE IT IN USER UPLOAD")
                 with open('./src/static/profiles/'+img_path+'.jpg', 'wb') as f:
                     f.write(data["body"])
     #database.create_msg(comment, img_path)
@@ -415,10 +410,10 @@ def user_upload(formdata):
     # content_type = 'text/plain; charset=utf-8\r\nLocation: /'
     # return response.get_response(body, response_code, content_type)
     return './src/static/profiles/'+img_path+'.jpg'
-    """ else:
-        response_code = '403 Forbidden'
-        body = b'request was rejected'
-        return response.get_response(body, response_code) """
+    # """ else:
+    #     response_code = '403 Forbidden'
+    #     body = b'request was rejected'
+    #     return response.get_response(body, response_code) """
 
 
 def signup(formdata):
@@ -624,7 +619,7 @@ def register(information):
     print(information)
     if len(information.values()) > 1:
         for dic in information.values():
-            print("dcitionary", dic)
+            print("dcitionary",dic)
             # if dic['heading']['name'] == "user":
             #     user = dic['body']
             # if dic['heading']['name'] == "pass":
@@ -632,7 +627,7 @@ def register(information):
             # if dic['heading']['name'] == "pass2":
             #     password2 = dic['body']
         userInfo = {"user": user, "pass": password, "pass2": password2}
-        print("UserInfo__________", userInfo)
+        print( "UserInfo__________",userInfo)
         if userInfo["user"] != "" and userInfo["pass"] != "" and userInfo["pass2"] != "":
             if userInfo["pass"] == userInfo["pass2"]:
                 response_code = '301 Moved Permanently'
