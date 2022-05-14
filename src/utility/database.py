@@ -198,4 +198,4 @@ def update_user(username, color):
     data = getUserbyUser(username)
     data['color'] = color
     query = {"username": username}
-    users.update(query, data)
+    users.update_one(query, data)
