@@ -205,13 +205,14 @@ function showNotification(fromUser) {
 
     const notifications = document.querySelector(".notifications-container");
     const username = fromUser.username;
+    const message = fromUser.comment;
 
     const newNotif = document.createElement('div');
     newNotif.classList.add("notification");
     newNotif.setAttribute("onclick", `goToDM("${username}");`)
     
 
-    newNotif.innerHTML = `${username} has sent you a message!`;
+    newNotif.innerHTML = `${username} has sent you a message!<br /><b>${username}</b>: ${message}`;
     notifications.append(newNotif);
 }
 

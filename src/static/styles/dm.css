@@ -86,7 +86,7 @@ body { /* Do a grid container if this doesn't work */
     overflow-y: scroll;
 
     position: absolute;
-    left: 1%;
+    right: 1%;
     top: 1%;
     
     display: flex;

@@ -359,7 +359,7 @@ def gen_user_payload(messageType: str, username: str, src=None, color=None, msg=
     # Get user info from database (img_src, color)
     if messageType == 'addOnlineUser':
         return json.dumps({'messageType': messageType, 'username': username, "img_src": src, 'color': color})
-    if messageType == 'recievedNotif':
+    if messageType == 'receivedNotif':
         msg = msg.replace('&', '&amp;')
         msg = msg.replace('<', '&lt;')
         msg = msg.replace('>', '&gt;')
