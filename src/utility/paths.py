@@ -409,7 +409,7 @@ def user_upload(formdata):
     # body = b''
     # content_type = 'text/plain; charset=utf-8\r\nLocation: /'
     # return response.get_response(body, response_code, content_type)
-    return './src/static/profiles/'+img_path+'.jpg'
+    return './src/static/images/'+img_path+'.jpg'
     # """ else:
     #     response_code = '403 Forbidden'
     #     body = b'request was rejected'
